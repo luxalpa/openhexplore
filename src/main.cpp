@@ -5,10 +5,6 @@
 #include "global_fns.h"
 #include "ddraw.h"
 
-void DebugInfo() {
-    MessageBoxA(nullptr, "Found!", "", MB_OK);
-}
-
 extern "C" __declspec(dllexport)
 int __stdcall StartHexplore(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd) {
     tagMSG Msg{};

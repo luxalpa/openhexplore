@@ -11,6 +11,8 @@ struct struc_2 {
     int field_8;
 };
 
+bool convertToGamePath(char *relPath);
 void initTextDB();
+void sub_416000(LPCSTR lpText, char **a2, int a3);
 
 #endif //OPENHEXPLORE_TEXTDB_H

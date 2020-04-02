@@ -6,6 +6,7 @@
 #include "globals.h"
 #include "global_fns.h"
 #include <ddraw.h>
+#include <cstdio>
 
 #pragma comment(lib, "ddraw.lib")
 
@@ -48,6 +49,22 @@ bool initDDraw() {
     return true;
 }
 
+// @ 405DC0
+void destroyDDraw() {
+    if (gDD) {
+        if (gPrimaryDDS) {
+            gPrimaryDDS->Release();
+            gPrimaryDDS = nullptr;
+        }
+        if (gDDS2) {
+            gDDS2->Release();
+            gDDS2 = nullptr;
+        }
+        gDD->Release();
+        gDD = nullptr;
+    }
+}
+
 // @ 405E20
 bool createGameWindow(HINSTANCE hInstance, int nCmdShow) {
     gWndClass.style = 3;
@@ -80,18 +97,50 @@ bool createGameWindow(HINSTANCE hInstance, int nCmdShow) {
     return true;
 }
 
-// @ 405DC0
-void destroyDDraw() {
-    if (gDD) {
-        if (gPrimaryDDS) {
-            gPrimaryDDS->Release();
-            gPrimaryDDS = nullptr;
-        }
-        if (gDDS2) {
-            gDDS2->Release();
-            gDDS2 = nullptr;
-        }
-        gDD->Release();
-        gDD = nullptr;
+// @ 416850;
+LPVOID getDDrawSurfaceMemPtr() {
+    _DDSURFACEDESC dds;
+
+    if (!gpDDSurfaceMemory) {
+        dds.dwSize = sizeof(_DDSURFACEDESC);
+        if (gDDS2->Lock(0, &dds, 0, 0) != DD_OK)
+            SendMessageA(gHWnd, WM_DESTROY, 0, 0);
+        gpDDSurfaceMemory = dds.lpSurface;
     }
+    return gpDDSurfaceMemory;
+}
+
+// @ 4168B0
+HRESULT releaseDDrawSurfaceMem() {
+    HRESULT result = gDDS2->Unlock(gpDDSurfaceMemory);
+    gpDDSurfaceMemory = 0;
+    return result;
+}
+
+// @ 4169A0
+void fillDDrawPalette() {
+    if (byte_44E104 == TRUE) {
+        if (gDDPalette) {
+            gDDPalette->SetEntries(0, 0, 256, gpPalEntries);
+            memcpy(gpPalEntries2, gpPalEntries, 0x400u);
+        }
+    }
+}
+
+// @ 4169E0
+int showCursor(BOOL bShow) {
+    return ShowCursor(bShow);
+}
+
+// @ 416A20
+[[noreturn]] void exitWithFileError(int errorCode, LPCSTR lpText) {
+    CHAR Caption[256]; // [esp+8h] [ebp-100h]
+
+    memset(getDDrawSurfaceMemPtr(), 0, 0x4B000u);
+    releaseDDrawSurfaceMem();
+    fillDDrawPalette();
+    showCursor(1);
+    sprintf(Caption, "FILE ERROR : %d", errorCode);
+    MessageBoxA(gHWnd, lpText, Caption, 0);
+    exit(-1);
 }
