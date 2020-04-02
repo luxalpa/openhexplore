@@ -6,6 +6,8 @@
 #include "init.h"
 #include "globals.h"
 #include "interop/memory.h"
+#include <windows.h>
+#include "game.h"
 
 // @ 4156E0
 int sub_4156E0(int a1) {
@@ -27,7 +29,7 @@ int sub_4156E0(int a1) {
 
 // @ 406760
 void resetEpisode() {
-    gEpisode = -1;
+    gGame.episode = -1;
 }
 
 // @ 413940
@@ -77,9 +79,9 @@ int parseCmdLineArg(char *a1) {
     _strupr(a1);
     if ( *a1 == 'E' && sscanf(a1, "E%dL%d", &episode, &level) == 2 )
     {
-        gEpisode = episode;
-        gLevel = level;
-        dword_4EB788 = 0;
+        gGame.episode = episode;
+        gGame.level = level;
+        gGame.field_8 = 0;
     }
     return 1;
 }

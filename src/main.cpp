@@ -3,6 +3,7 @@
 #include "globals.h"
 #include "init.h"
 #include "global_fns.h"
+#include "ddraw.h"
 
 void DebugInfo() {
     MessageBoxA(nullptr, "Found!", "", MB_OK);
@@ -23,10 +24,10 @@ int __stdcall StartHexplore(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR 
     resetEpisode();
     parseCmdLine(lpCmdLine, parseCmdLineArg);
 
-    if (!sub_405E20(hInstance, nShowCmd))
-        return 0;
+    if (!createGameWindow(hInstance, nShowCmd))
+        return -2;
 
-    sub_416EE0(&gEpisode);
+    initGame(&gGame);
     while (true) {
         while (!PeekMessageA(&Msg, nullptr, 0, 0, 0)) {
             if (dword_5730DC | 1) {

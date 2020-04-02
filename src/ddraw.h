@@ -6,6 +6,9 @@
 #define OPENHEXPLORE_DDRAW_H
 
 #include <windows.h>
-//int sub_405E20(HINSTANCE hInstance, int nCmdShow);
+#include <ddraw.h>
+
+bool createGameWindow(HINSTANCE hInstance, int nCmdShow);
+void destroyDDraw();
 
 #endif //OPENHEXPLORE_DDRAW_H
