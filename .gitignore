@@ -1,2 +1,6 @@
 cmake-build-debug
 cmake-build-release
+*.dll
+*.manifest
+*.ilk
+*.pdb
