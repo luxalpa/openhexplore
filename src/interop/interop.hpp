@@ -137,3 +137,238 @@ struct hexp_global
         return (T*)TAddress;
     }
 };
+
+constexpr uintptr_t remap_address(uintptr_t locoAddress)
+{
+    return GOOD_PLACE_FOR_DATA_SEGMENT - 0x008A4000 + locoAddress;
+}
+
+template<uint32_t TAddress, typename T>
+constexpr T& addr()
+{
+    return *((T*)remap_address(TAddress));
+}
+
+/**
+* Returns the flags register
+*
+* Flags register is as follows:
+* 0bSZ0A_0P0C_0000_0000
+* S = Signed flag
+* Z = Zero flag
+* C = Carry flag
+* A = Adjust flag
+* P = Parity flag
+* All other bits are undefined.
+*/
+int32_t call(int32_t address);
+int32_t call(int32_t address, registers& registers);
+
+template<typename T, uintptr_t TAddress>
+struct loco_global
+{
+public:
+    typedef T type;
+    typedef type* pointer;
+    typedef type& reference;
+    typedef const type& const_reference;
+
+private:
+    pointer _Myptr;
+
+public:
+    loco_global()
+    {
+        _Myptr = &(addr<TAddress, T>());
+    }
+
+    operator reference()
+    {
+        return addr<TAddress, T>();
+    }
+
+    loco_global& operator=(const_reference v)
+    {
+        addr<TAddress, T>() = v;
+        return *this;
+    }
+
+    loco_global& operator+=(const_reference v)
+    {
+        addr<TAddress, T>() += v;
+        return *this;
+    }
+
+    loco_global& operator|=(const_reference v)
+    {
+        addr<TAddress, T>() |= v;
+        return *this;
+    }
+
+    loco_global& operator&=(const_reference v)
+    {
+        addr<TAddress, T>() &= v;
+        return *this;
+    }
+
+    loco_global& operator^=(const_reference v)
+    {
+        addr<TAddress, T>() ^= v;
+        return *this;
+    }
+
+    loco_global& operator-=(const_reference v)
+    {
+        addr<TAddress, T>() -= v;
+        return *this;
+    }
+
+    loco_global& operator++()
+    {
+        addr<TAddress, T>()++;
+        return *this;
+    }
+
+    T operator++(int)
+    {
+        reference ref = addr<TAddress, T>();
+        T temp = ref;
+        ref++;
+        return temp;
+    }
+
+    loco_global& operator--()
+    {
+        addr<TAddress, T>()--;
+        return *this;
+    }
+
+    T operator--(int)
+    {
+        reference ref = addr<TAddress, T>();
+        T temp = ref;
+        ref--;
+        return temp;
+    }
+
+    reference operator*()
+    {
+        return addr<TAddress, T>();
+    }
+
+    pointer operator->()
+    {
+        return &(addr<TAddress, T>());
+    }
+
+    constexpr size_t size() const
+    {
+        return sizeof(T);
+    }
+};
+
+template<typename T>
+struct loco_global_iterator
+{
+private:
+    T* _ptr;
+
+public:
+    loco_global_iterator(T* p)
+            : _ptr(p)
+    {
+    }
+    loco_global_iterator& operator++()
+    {
+        ++_ptr;
+        return *this;
+    }
+    loco_global_iterator operator++(int)
+    {
+        auto temp = *this;
+        ++_ptr;
+        return temp;
+    }
+    loco_global_iterator& operator--()
+    {
+        --_ptr;
+        return *this;
+    }
+    loco_global_iterator operator--(int)
+    {
+        auto temp = *this;
+        --_ptr;
+        return temp;
+    }
+    bool operator==(const loco_global_iterator& rhs)
+    {
+        return _ptr == rhs._ptr;
+    }
+    bool operator!=(const loco_global_iterator& rhs)
+    {
+        return _ptr != rhs._ptr;
+    }
+    T& operator*()
+    {
+        return *_ptr;
+    }
+};
+
+template<typename T, size_t TCount, uintptr_t TAddress>
+struct loco_global<T[TCount], TAddress>
+{
+public:
+    typedef T type;
+    typedef type* pointer;
+    typedef type& reference;
+    typedef const type& const_reference;
+    typedef loco_global_iterator<T> iterator;
+
+private:
+    pointer _Myfirst;
+    pointer _Mylast;
+
+public:
+    loco_global()
+    {
+        _Myfirst = get();
+        _Mylast = _Myfirst + TCount;
+    }
+
+    operator pointer()
+    {
+        return get();
+    }
+
+    pointer get() const
+    {
+        return reinterpret_cast<pointer>(&addr<TAddress, type>());
+    }
+
+    reference operator[](int idx)
+    {
+#ifndef NDEBUG
+        if (idx < 0 || static_cast<size_t>(idx) >= size())
+            {
+                throw std::out_of_range("loco_global: bounds check violation!");
+            }
+#endif
+        return get()[idx];
+    }
+
+    constexpr size_t size() const
+    {
+        return TCount;
+    }
+
+    iterator begin() const
+    {
+        return iterator(&addr<TAddress, T>());
+    }
+
+    iterator end() const
+    {
+        const pointer ptrEnd = (&addr<TAddress, T>()) + TCount;
+        return iterator(ptrEnd);
+    }
+};

@@ -13,4 +13,4 @@ add_library(openhexplore SHARED
         src/main.cpp src/main.h
         src/interop/interop.cpp src/interop/interop.hpp
         src/interop/memory.cpp src/interop/memory.h
-        src/init.cpp src/init.h src/globals.h)
+        src/init.cpp src/init.h src/globals.h src/ddraw.cpp src/ddraw.h)
