@@ -5,7 +5,8 @@
 #include "ddraw.h"
 #include "globals.h"
 
-/*int sub_405E20(HINSTANCE hInstance, int nCmdShow) {
+/*
+int sub_405E20(HINSTANCE hInstance, int nCmdShow) {
     int v2; // ST1C_4
     int v3; // eax
     int result; // eax
@@ -18,17 +19,16 @@
     int v11; // [esp+9Ch] [ebp-68h]
     int v12; // [esp+100h] [ebp-4h]
 
-    WNDCLASSA WndClass = gWndClass;
-    gWndClass->style = 3;
-    gWndClass->lpfnWndProc = sub_4060B0;
-    gWndClass->cbClsExtra = 0;
-    gWndClass->cbWndExtra = 0;
-    gWndClass->hInstance = hInstance;
-    gWndClass->hIcon = LoadIconA(hInstance, (LPCSTR)0x7F00);
-    gWndClass->hCursor = LoadCursorA(nullptr, (LPCSTR)0x7F00);
-    gWndClass->lpszMenuName = WindowName;
-    gWndClass->lpszClassName = WindowName;
-    gWndClass->hbrBackground = nullptr;
+    gWndClass.style = 3;
+    gWndClass.lpfnWndProc = sub_4060B0;
+    gWndClass.cbClsExtra = 0;
+    gWndClass.cbWndExtra = 0;
+    gWndClass.hInstance = hInstance;
+    gWndClass.hIcon = LoadIconA(hInstance, (LPCSTR)0x7F00);
+    gWndClass.hCursor = LoadCursorA(nullptr, (LPCSTR)0x7F00);
+    gWndClass.lpszMenuName = WindowName;
+    gWndClass.lpszClassName = WindowName;
+    gWndClass.hbrBackground = nullptr;
     RegisterClassA(&WndClass);
     v2 = GetSystemMetrics(1);
     v3 = GetSystemMetrics(0);
@@ -82,4 +82,5 @@
         result = 1;
     }
     return result;
-}*/
+}
+*/

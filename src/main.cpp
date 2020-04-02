@@ -2,10 +2,7 @@
 #include "interop/interop.hpp"
 #include "globals.h"
 #include "init.h"
-
-inline auto sub_405E20 = (int (*const)(HINSTANCE hInstance, int nShowCmd)) 0x405E20;
-inline auto sub_416EE0 = (BOOL (*const)(int *a1)) 0x416EE0;
-inline auto sub_426590 = (signed int (*const)()) 0x426590;
+#include "global_fns.h"
 
 void DebugInfo() {
     MessageBoxA(nullptr, "Found!", "", MB_OK);
