@@ -14,6 +14,19 @@ struct Game {
     char saveDir[0x100];
 };
 
+enum class RegistryValueType {
+    String = 1,
+    Number = 2,
+};
+
+bool setRegistryValue(
+        bool onlyForCurrentUser,
+        LPCSTR optSubKey,
+        LPCSTR lpValueName,
+        RegistryValueType valueType,
+        LPCSTR lpString
+);
+
 void initGame(Game *game);
 
 #endif //OPENHEXPLORE_GAME_H

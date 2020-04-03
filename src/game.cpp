@@ -9,6 +9,7 @@
 #include "global_fns.h"
 #include "main.h"
 #include "textdb.h"
+#include "registry.h"
 
 template<char c>
 struct encrypt {
@@ -29,6 +30,27 @@ char EncryptCharsA<Chars...>::value[sizeof...(Chars) + 1] = {
 
 char *gExecutableName = EncryptCharsA<'H', 'E', 'X', 'P', 'L', 'O', 'R', 'E', '.', 'E', 'X', 'E'>::value;
 
+// @ 416E30
+bool setRegistryValue(
+        bool onlyForCurrentUser,
+        LPCSTR optSubKey,
+        LPCSTR lpValueName,
+        RegistryValueType valueType,
+        LPCSTR lpString
+) {
+    bool result;
+
+    HKEY key = Registry::createKey(onlyForCurrentUser, "Heliovisions", "Hexplore", "1.0", optSubKey);
+    if (valueType == RegistryValueType::Number) {
+        result = Registry::setStringValue(key, lpValueName, lpString);
+    } else if (valueType == RegistryValueType::String) {
+        result = Registry::setDWordValue(key, lpValueName, *(int *) lpString);
+    } else {
+        result = false;
+    }
+    Registry::closeKey(key);
+    return result;
+}
 
 // @ 416EE0
 void initGame(Game *game) {

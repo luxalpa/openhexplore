@@ -14,6 +14,7 @@ LPVOID getDDrawSurfaceMemPtr();
 HRESULT releaseDDrawSurfaceMem();
 void fillDDrawPalette();
 int showCursor(BOOL bShow);
+[[noreturn]] void exitSilently(int code);
 [[noreturn]] void exitWithFileError(int errorCode, LPCSTR lpText);
 
 #endif //OPENHEXPLORE_DDRAW_H

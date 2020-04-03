@@ -14,14 +14,14 @@
 #define gText_Agility HEXP_ADDRESS(0x44C596, char) // 0x32 elements
 #define gText_ToNextLevel HEXP_ADDRESS(0x44C5C8, char) // 0x32 elements
 
-#define dword_44CDAC HEXP_GLOBAL(0x44CDAC, void *)
-#define dword_44CDB0 HEXP_GLOBAL(0x44CDB0, int)
-#define dword_44CDB4 HEXP_GLOBAL(0x44CDB4, int)
+#define gLoadedFiles HEXP_GLOBAL(0x44CDAC, FileEntryStruct *) // Lots of memory (24k)
+#define gMaxTotalSize HEXP_GLOBAL(0x44CDB0, int)
+#define gCurrentTotalSize HEXP_GLOBAL(0x44CDB4, int)
 #define dword_44CDB8 HEXP_GLOBAL(0x44CDB8, int)
-#define dword_44CDC0 HEXP_GLOBAL(0x44CDC0, int)
+#define gNumFiles HEXP_GLOBAL(0x44CDBC, int)
+#define dword_44CDC0 HEXP_GLOBAL(0x44CDC0, int) // Possibly max size ever used?
 #define dword_44CDC4 HEXP_GLOBAL(0x44CDC4, int)
-#define dword_44CDBC HEXP_GLOBAL(0x44CDBC, int)
-#define dword_44CDC8 HEXP_GLOBAL(0x44CDC8, int)
+#define dword_44CDC8 HEXP_GLOBAL(0x44CDC8, int) // Possibly max number of files we had?
 
 #define gDD HEXP_GLOBAL(0x44E0F4, LPDIRECTDRAW)
 #define gPrimaryDDS HEXP_GLOBAL(0x44E0F8, IDirectDrawSurface*)

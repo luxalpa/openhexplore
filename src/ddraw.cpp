@@ -132,6 +132,13 @@ int showCursor(BOOL bShow) {
     return ShowCursor(bShow);
 }
 
+// @ 4169F0
+[[noreturn]] void exitSilently(int code) {
+    setRegistryValue(true, nullptr, "LastError:", RegistryValueType::Number, (LPCSTR)&code);
+    showCursor(true);
+    exit(-1);
+}
+
 // @ 416A20
 [[noreturn]] void exitWithFileError(int errorCode, LPCSTR lpText) {
     CHAR Caption[256]; // [esp+8h] [ebp-100h]

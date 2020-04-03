@@ -11,6 +11,13 @@ struct struc_2 {
     int field_8;
 };
 
+struct FileEntryStruct {
+    char *pData;
+    int size;
+    short flags;
+    short isInUse;
+};
+
 bool convertToGamePath(char *relPath);
 void initTextDB();
 void sub_416000(LPCSTR lpText, char **a2, int a3);

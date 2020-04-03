@@ -15,6 +15,12 @@ namespace Registry {
             LPCSTR mainKey,
             LPCSTR optSubKey
     );
+
+    bool setStringValue(HKEY hKey, LPCSTR lpValueName, LPCSTR lpString);
+
+    bool setDWordValue(HKEY hKey, LPCSTR lpValueName, int value);
+
+    bool closeKey(HKEY hKey);
 }
 
 #endif //OPENHEXPLORE_REGISTRY_H
