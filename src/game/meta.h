@@ -2,8 +2,8 @@
 // Created by Smaug on 2020-04-02.
 //
 
-#ifndef OPENHEXPLORE_GAME_H
-#define OPENHEXPLORE_GAME_H
+#ifndef OPENHEXPLORE_META_H
+#define OPENHEXPLORE_META_H
 
 struct Game {
     int episode;
@@ -29,4 +29,4 @@ bool setRegistryValue(
 
 void initGame(Game *game);
 
-#endif //OPENHEXPLORE_GAME_H
+#endif //OPENHEXPLORE_META_H

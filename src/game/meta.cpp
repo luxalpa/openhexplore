@@ -2,14 +2,14 @@
 // Created by Smaug on 2020-04-02.
 //
 
-#include <windows.h>
+#include <Windows.h>
 #include <cstdio>
-#include "game.h"
-#include "globals.h"
-#include "global_fns.h"
-#include "main.h"
-#include "textdb.h"
-#include "registry.h"
+#include "meta.h"
+#include "../globals.h"
+#include "../global_fns.h"
+#include "../main.h"
+#include "../textdb.h"
+#include "../registry.h"
 
 template<char c>
 struct encrypt {

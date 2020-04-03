@@ -4,6 +4,7 @@
 #include "init.h"
 #include "global_fns.h"
 #include "ddraw.h"
+#include "game/run.h"
 
 extern "C" __declspec(dllexport)
 int __stdcall StartHexplore(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd) {

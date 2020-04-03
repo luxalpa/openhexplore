@@ -5,10 +5,10 @@
 #include <cstdio>
 #include "init.h"
 #include "globals.h"
-#include "interop/memory.h"
 #include <windows.h>
-#include "game.h"
+#include "game/meta.h"
 #include "textdb.h"
+#include "global_fns.h"
 
 // @ 4156E0
 int sub_4156E0(int a1) {

@@ -6,7 +6,7 @@
 #define OPENHEXPLORE_TEXTDB_H
 
 struct struc_2 {
-    char *field_0;
+    char *text;
     int field_4;
     int field_8;
 };
@@ -18,8 +18,10 @@ struct FileEntryStruct {
     short isInUse;
 };
 
-bool convertToGamePath(char *relPath);
 void initTextDB();
-void sub_416000(LPCSTR lpText, char **a2, int a3);
+char * allocFile(size_t fileSize, int flags);
+void loadFile(LPCSTR filePath, char **destination, bool isEncrypted);
+void getString(char *fileData, unsigned int entryID, struc_2 *output);
+bool convertToGamePath(char *relPath);
 
 #endif //OPENHEXPLORE_TEXTDB_H

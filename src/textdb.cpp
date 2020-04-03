@@ -9,7 +9,6 @@
 #include "global_fns.h"
 #include "files.h"
 #include "ddraw.h"
-#include "interop/memory.h"
 #include <io.h>
 #include <fcntl.h>
 #include <sys/stat.h>
@@ -21,22 +20,22 @@ void initTextDB() {
 
     sprintf(filepath, "%s\\%s%s", "COMMON", gLangPrefix, "txt.st1");
     convertToGamePath(filepath);
-    sub_416000(filepath, &gTextDBData, true);
-    sub_4160A0(gTextDBData, 100u, &a3);
-    strcpy(gText_Strength, a3.field_0);
-    sub_4160A0(gTextDBData, 101u, &a3);
-    strcpy(gText_Mechanism, a3.field_0);
-    sub_4160A0(gTextDBData, 102u, &a3);
-    strcpy(gText_Incantation, a3.field_0);
-    sub_4160A0(gTextDBData, 103u, &a3);
-    strcpy(gText_Agility, a3.field_0);
-    sub_4160A0(gTextDBData, 104u, &a3);
-    strcpy(gText_ToNextLevel, a3.field_0);
+    loadFile(filepath, &gTextDBData, true);
+    getString(gTextDBData, 100u, &a3);
+    strcpy(gText_Strength, a3.text);
+    getString(gTextDBData, 101u, &a3);
+    strcpy(gText_Mechanism, a3.text);
+    getString(gTextDBData, 102u, &a3);
+    strcpy(gText_Incantation, a3.text);
+    getString(gTextDBData, 103u, &a3);
+    strcpy(gText_Agility, a3.text);
+    getString(gTextDBData, 104u, &a3);
+    strcpy(gText_ToNextLevel, a3.text);
 }
 
 // Allocates Memory for the file
 // @ 4157D0
-char * allocFile(size_t fileSize, int flags) {
+char *allocFile(size_t fileSize, int flags) {
     signed int v7; // eax
 
     if (!gLoadedFiles)
@@ -45,7 +44,7 @@ char * allocFile(size_t fileSize, int flags) {
         return 0;
 
     FileEntryStruct *currentEntry = gLoadedFiles;
-    for(int i = 0; i < 2000; i++, currentEntry++) {
+    for (int i = 0; i < 2000; i++, currentEntry++) {
         if (!currentEntry->isInUse)
             break;
     }
@@ -62,7 +61,7 @@ char * allocFile(size_t fileSize, int flags) {
     if (gCurrentTotalSize + fileSize > gMaxTotalSize)
         exitSilently(3);
 
-    char *mem = (char*) hexp_malloc(fileSize);
+    char *mem = (char *) hexp_malloc(fileSize);
     currentEntry->pData = mem;
     if (!mem)
         exitSilently(14);
@@ -82,40 +81,92 @@ char * allocFile(size_t fileSize, int flags) {
 }
 
 // @ 416000
-void sub_416000(LPCSTR lpText, char **a2, int a3) {
-    int v3; // eax
-    int v4; // ebx
-    int filesize; // eax
-    unsigned int v6; // edi
-    char *v7; // eax
-    char v8; // edx
-    char v9; // ecx
-    char *v10; // esi
-    char *v11; // eax
-    char v12; // bl
+void loadFile(LPCSTR filePath, char **destination, bool isEncrypted) {
+    *destination = 0;
+    int fd = Files::open(filePath, Files::OpenMode::ReadOnly);
 
-    *a2 = 0;
-    v3 = Files::open(lpText, Files::OpenMode::ReadOnly);
-    v4 = v3;
-    filesize = Files::getSize(v3);
-    v6 = filesize;
-    v7 = (char *) allocFile(filesize, 0x8003);
-    *a2 = v7;
-    Files::read(v4, v7, v6);
-    Files::close(v4);
-    if (a3) {
-        v9 = 55;
-        v10 = *a2;
-        v11 = &(*a2)[v6];
-        if (&v10[v6] > v10) {
-            do {
-                v8 = *v10;
-                v12 = *v10++ ^ v9;
-                v9 += v8 + 51;
-                *(v10 - 1) = v12;
-            } while (v11 > v10);
+    int filesize = Files::getSize(fd);
+    *destination = allocFile(filesize, 0x8003);
+    Files::read(fd, *destination, filesize);
+
+    Files::close(fd);
+
+    if (isEncrypted) {
+        char decVal = 55;
+        char *data = *destination;
+
+        for (int i = 0; i < filesize; i++) {
+            char curVal = data[i];
+            data[i] ^= decVal;
+            decVal += 0x33 + curVal;
         }
     }
+}
+
+struct TextDBHeader {
+    int magicNumber;
+    int version;
+    int numEntries;
+    int offsetSection1;
+    int area1;
+    int areaStrings;
+    int area2;
+};
+
+// @ 4160A0
+void getString(char *fileData, unsigned int entryID, struc_2 *output) {
+    TextDBHeader *header = (TextDBHeader *) fileData;
+
+    if (!fileData) {
+        return;
+    }
+
+    if (header->magicNumber != 'TXTB') {
+        return;
+    }
+
+    if (header->numEntries == 0) {
+        return;
+    }
+
+    if (!output) {
+        return;
+    }
+
+    if (entryID > 99999999) {
+        return;
+    }
+
+    output->field_4 = 0;
+    output->field_8 = -1;
+    output->text = 0;
+
+    unsigned int *lowerBound = (unsigned int *) &fileData[header->offsetSection1];
+    unsigned int *upperBound = &lowerBound[header->numEntries];
+    unsigned int *currentID = &lowerBound[header->numEntries / 2];
+
+    if (lowerBound >= upperBound) {
+        return;
+    }
+
+    while (*currentID != entryID) {
+        if (*currentID <= entryID)
+            lowerBound = currentID + 1;
+        else
+            upperBound = currentID;
+
+        currentID = &lowerBound[(upperBound - lowerBound) / 2];
+        if (lowerBound >= upperBound)
+            return;
+    }
+
+    output->text = &fileData[currentID[header->numEntries]];
+    int *v8 = (int*) &fileData[header->area2];
+
+    // TODO: These don't do anything.
+    int v7 = (&currentID[-*((int *) fileData + 3) / 4] - (unsigned int*)fileData) / 2;
+    output->field_4 = v8[v7];
+    output->field_8 = v8[v7 + 1];
 }
 
 // Converts the provided parameter and replaces it inplace with the full path to the game

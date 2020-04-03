@@ -13,5 +13,4 @@ add_compile_definitions(_X86_) # so we can use windef.h instead of windows.h
 add_library(openhexplore SHARED
         src/main.cpp src/main.h
         src/interop/interop.cpp src/interop/interop.hpp
-        src/interop/memory.cpp src/interop/memory.h
-        src/init.cpp src/init.h src/globals.h src/ddraw.cpp src/ddraw.h src/global_fns.h src/game.cpp src/game.h src/textdb.cpp src/textdb.h src/files.cpp src/files.h src/registry.cpp src/registry.h)
+        src/init.cpp src/init.h src/globals.h src/ddraw.cpp src/ddraw.h src/global_fns.h src/game/meta.cpp src/game/meta.h src/textdb.cpp src/textdb.h src/files.cpp src/files.h src/registry.cpp src/registry.h src/game/run.cpp src/game/run.h)
