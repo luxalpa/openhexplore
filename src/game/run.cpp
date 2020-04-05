@@ -46,8 +46,8 @@ signed int sub_426590() {
     }
 
     if (dword_4E60E0 == 0) {
-        /*if (showLogos() == 1)
-            return 1;*/
+//        if (showLogos() == 1)
+//            return 1;
 
         // Reached after the 2 logo screens
         dword_4DBCF4 = (int) &unk_4DBD00;
@@ -66,12 +66,15 @@ signed int sub_426590() {
 
     switch (dword_4E5FAC) {
         case 1:
+            // Menu (and game?)
             sub_406C80(dword_4EB750);
             break;
         case 2:
+            // Videos
             sub_414D30();
             return 1;
         case 3:
+            // Credits
             sub_414E40();
             return 1;
     }

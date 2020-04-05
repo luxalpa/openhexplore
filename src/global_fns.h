@@ -28,7 +28,6 @@ inline auto sub_40EA00 = (int (*const)(int*, int)) 0x40EA00;
 inline auto sub_413A80 = (int (*const)(int)) 0x413A80;
 inline auto sub_414270 = (int (*const)(int)) 0x414270;
 inline auto sub_414BD0 = (int (*const)()) 0x414BD0;
-inline auto playVideo2 = (bool (*const)(bool a1, int a2, int a3)) 0x414C80;
 inline auto sub_414D30 = (int (*const)()) 0x414D30;
 inline auto sub_414E40 = (int (*const)()) 0x414E40;
 inline auto sub_415E70 = (int (*const)()) 0x415E70;
