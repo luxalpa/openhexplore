@@ -4,7 +4,7 @@
 
 #include <cstdio>
 #include "run.h"
-#include "../ddraw.h"
+#include "../game_window.h"
 #include "../globals.h"
 #include "meta.h"
 #include "../global_fns.h"
@@ -46,11 +46,11 @@ signed int sub_426590() {
     }
 
     if (dword_4E60E0 == 0) {
-//        if (showLogos() == 1)
-//            return 1;
+        if (showLogos() == 1)
+            return 1;
 
         // Reached after the 2 logo screens
-        dword_4DBCF4 = (int) &unk_4DBD00;
+        dword_4DBCF4 = (int) &dword_4DBD00;
         dword_4E6098 = 0;
         dword_4E5FF4 = 0;
         dword_4E5FAC = 1;
@@ -113,7 +113,7 @@ signed int sub_426590() {
         dword_4E5FC8 = 0;
         dword_4E5FCC = 0;
         dword_4E5FD0 = 0;
-        unk_44E120 = 0;
+        gModifierKeyState = 0;
         dword_4E60C8 = 0;
         dword_4E60DC = -1;
     } else {
@@ -150,20 +150,20 @@ signed int sub_426590() {
         dword_4E5FC8 = 0;
         dword_4E5FCC = 0;
         dword_4E5FD0 = 0;
-        unk_44E120 = 0;
+        gModifierKeyState = 0;
         dword_4E60DC = -1;
         dword_4E60C8 = 0;
         if (!(dword_4E6098 & 6))
             goto LABEL_56;
     } else {
         dword_4E5FC4 = dword_44E118;
-        dword_4E5FBC = unk_44E110;
-        dword_4E5FC0 = unk_44E114;
+        dword_4E5FBC = dword_44E110;
+        dword_4E5FC0 = dword_44E114;
         dword_4E5FC8 = dword_4E5FD4;
         dword_4E5FCC = dword_4E5FD8;
         dword_4E5FD0 = dword_4E5FDC;
         sub_427290();
-        unk_44E11C = 0;
+        dword_44E11C = 0;
     }
     sub_426A70();
     LABEL_56:
@@ -175,7 +175,7 @@ signed int sub_426590() {
         dword_4E5FC8 = 0;
         dword_4E5FCC = 0;
         dword_4E5FD0 = 0;
-        unk_44E120 = 0;
+        gModifierKeyState = 0;
         dword_4E60C8 = 0;
         dword_4E60DC = -1;
         dword_44E118 = 0;
@@ -186,7 +186,7 @@ signed int sub_426590() {
         result = 1;
     } else {
         if (dword_4E5FB0 & 2)
-            sub_40EA00(&unk_4DBD00, dword_4DBCF4);
+            sub_40EA00(&dword_4DBD00, dword_4DBCF4);
         sub_422860();
         sub_42AD50();
         sub_423360();
@@ -209,7 +209,7 @@ signed int sub_426590() {
                 dword_44E118 &= 0xFFFFFFFC;
             if (!(dword_44E118 & 8))
                 dword_4E5FC4 &= 0xFFFFFFF7;
-            unk_44E120 &= 0xFFFFFFFD;
+            gModifierKeyState &= 0xFFFFFFFD;
             if (dword_4E5FB0 & 2) {
                 dword_4E60C8 = 0;
                 dword_4E60DC = -1;

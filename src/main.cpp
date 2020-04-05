@@ -3,7 +3,7 @@
 #include "globals.h"
 #include "init.h"
 #include "global_fns.h"
-#include "ddraw.h"
+#include "game_window.h"
 #include "game/run.h"
 
 extern "C" __declspec(dllexport)

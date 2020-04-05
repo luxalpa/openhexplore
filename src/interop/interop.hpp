@@ -86,8 +86,8 @@ assert_struct_size(registers, 7 * 4);
     #define GOOD_PLACE_FOR_DATA_SEGMENT ((uintptr_t)0x8A4000)
 #endif
 
-#define HEXP_ADDRESS(address, type)     ((type*)(GOOD_PLACE_FOR_DATA_SEGMENT - 0x8A4000 + (address)))
-#define HEXP_GLOBAL(address, type)      (*((type*)(GOOD_PLACE_FOR_DATA_SEGMENT - 0x8A4000 + (address))))
+#define ADDR(address, type)     ((type*)(GOOD_PLACE_FOR_DATA_SEGMENT - 0x8A4000 + (address)))
+#define GLOB(address, type)      (*((type*)(GOOD_PLACE_FOR_DATA_SEGMENT - 0x8A4000 + (address))))
 
 /**
 * Returns the flags register
@@ -125,12 +125,12 @@ struct hexp_global
 {
     void operator=(T rhs)
     {
-        HEXP_GLOBAL(TAddress, T) = rhs;
+        GLOB(TAddress, T) = rhs;
     }
 
     operator T()
     {
-        return HEXP_GLOBAL(TAddress, T);
+        return GLOB(TAddress, T);
     }
 
     T* operator &() {

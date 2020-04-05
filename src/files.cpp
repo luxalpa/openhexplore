@@ -11,7 +11,7 @@
 #include <cstdio>
 #include <io.h>
 #include "files.h"
-#include "ddraw.h"
+#include "game_window.h"
 
 namespace Files {
 

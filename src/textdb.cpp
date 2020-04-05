@@ -8,7 +8,7 @@
 #include "globals.h"
 #include "global_fns.h"
 #include "files.h"
-#include "ddraw.h"
+#include "game_window.h"
 #include <io.h>
 #include <fcntl.h>
 #include <sys/stat.h>
@@ -78,6 +78,87 @@ char *allocFile(size_t fileSize, int flags) {
         dword_44CDC8 = gNumFiles;
 
     return currentEntry->pData;
+}
+
+// @ 4159A0
+LRESULT keycodeHandler(UINT msg, WPARAM wparam, LPARAM lparam) {
+    unsigned int result; // eax
+    char v7; // cl
+    int v8; // edx
+    int v9; // edi
+
+    result = true;
+    switch (msg) {
+        case WM_KEYDOWN:
+            if (wparam == VK_SHIFT) {
+                gModifierKeyState |= 1u;
+                return TRUE;
+            } else {
+                if (wparam == VK_CONTROL) {
+                    // TODO: We could remove this but it works based on the auto key repeat feature in windows, so there would be a delay.
+                    // previous key state
+                    if (!(lparam & 0x40000000))
+                        gModifierKeyState |= 2u;
+                } else {
+                    int v4 = 0;
+                    int *pKeyCode = dword_4EA330;
+                    while (*pKeyCode != wparam) {
+                        ++pKeyCode;
+                        ++v4;
+                        if (pKeyCode >= &dword_4EA3B0)
+                            goto LABEL_12;
+                    }
+                    dword_4EA2D8 |= 1 << v4;
+                    LABEL_12:
+                    unsigned int v6 = (dword_44CDCC + 1) % 10;
+                    if (v6 == dword_44CDD0) { // TODO: Find out when this is true, doesn't appear to happen
+                        if (wparam != VK_BACK) {
+                            sub_4227B0(dword_4E5F58, 20);
+                            return TRUE;
+                        }
+                    } else if (wparam == VK_BACK || !(lparam & 0x40000000)) {
+                        dword_4EA2E0[dword_44CDCC] = wparam;
+                        dword_44CDCC = v6;
+                        return TRUE;
+                    }
+                }
+                return TRUE;
+            }
+        case WM_KEYUP:
+            if (wparam == VK_SHIFT) {
+                result = gModifierKeyState & 0xFFFFFFFE;
+                gModifierKeyState &= 0xFFFFFFFE;
+            } else if (wparam != VK_CONTROL) {
+                v7 = 0;
+                result = (unsigned int) dword_4EA330;
+                while (*(int *) result != wparam) {
+                    result += 4;
+                    ++v7;
+                    if (result >= (unsigned int) &dword_4EA3B0)
+                        return result;
+                }
+                v8 = ~(1 << v7);
+                result = v8 & dword_4EA2D8;
+                dword_4EA2D8 &= v8;
+            }
+            break;
+        case WM_CHAR:
+            result = dword_44CDDC;
+            if (dword_44CDDC) {
+                v9 = dword_44CDD4;
+                result = (dword_44CDD4 + 1) / 10;
+                if (dword_44CDD8 == (dword_44CDD4 + 1) % 10) {
+                    result = sub_4227B0(dword_4E5F58, 20);
+                } else {
+                    dword_44CDD4 = (dword_44CDD4 + 1) % 10;
+                    dword_4EA308[v9] = wparam;
+                }
+            }
+            break;
+        default:
+            return FALSE;
+    }
+    return result;
 }
 
 // @ 416000
@@ -161,10 +242,10 @@ void getString(char *fileData, unsigned int entryID, struc_2 *output) {
     }
 
     output->text = &fileData[currentID[header->numEntries]];
-    int *v8 = (int*) &fileData[header->area2];
+    int *v8 = (int *) &fileData[header->area2];
 
     // TODO: These don't do anything.
-    int v7 = (&currentID[-*((int *) fileData + 3) / 4] - (unsigned int*)fileData) / 2;
+    int v7 = (&currentID[-*((int *) fileData + 3) / 4] - (unsigned int *) fileData) / 2;
     output->field_4 = v8[v7];
     output->field_8 = v8[v7 + 1];
 }
