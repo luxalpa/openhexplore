@@ -153,157 +153,35 @@ int showCursor(BOOL bShow) {
 }
 
 // @ 4060B0
-LRESULT WINAPI mainWindowHandler(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam) {
+LRESULT WINAPI mainWindowHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     LONG v5; // eax
     char v6; // [esp+10h] [ebp-44h]
     struct tagPAINTSTRUCT Paint; // [esp+14h] [ebp-40h]
 
-    LRESULT result = keycodeHandler(Msg, wParam, lParam);
+    LRESULT result = keycodeHandler(msg, wParam, lParam);
     if (result) {
         // The message has already been handled.
         return 1;
     }
 
-    if (Msg > WM_SETFOCUS) {
-        if (Msg > 0x1C) {
-            if (Msg > 0x100) {
-                if (Msg > 0x200) {
-                    if (Msg <= 0x30F) {
-                        if (Msg == 0x30F) {
-                            if (gDDPalette)
-                                gDDPalette->SetEntries(0, 0, 256, gpPalEntries2);
-                        } else {
-                            switch (Msg) {
-                                case 0x201u:
-                                    dword_44004C = 0;
-                                    dword_44E118 &= 0xFFFFFFF5;
-                                    dword_44E110 = (unsigned __int16) lParam;
-                                    dword_44E114 = (unsigned int) lParam >> 16;
-                                    if (sub_421640(0, (unsigned __int16) lParam, (unsigned int) lParam >> 16,
-                                                   (int *) &v6) != 1
-                                        || dword_4E5FAC != 1) {
-                                        dword_44E158 = 0;
-                                        dword_44E118 |= 5u;
-                                    } else {
-                                        dword_44E148 = dword_44E110;
-                                        dword_44E150 = dword_44E110;
-                                        dword_44E14C = dword_44E114;
-                                        dword_44E154 = dword_44E114;
-                                        dword_440044 = GetMessageTime();
-                                        dword_44E158 = 1;
-                                        sub_429BB0(dword_4DBCF4 + 176, dword_44E150, dword_44E154, &dword_4E60D4,
-                                                   &dword_4E60D8);
-                                    }
-                                    break;
-                                case 0x202u:
-                                    dword_44E110 = (unsigned __int16) lParam;
-                                    dword_44E114 = (unsigned int) lParam >> 16;
-                                    if (dword_44E158) {
-                                        dword_44E148 = dword_44E110;
-                                        dword_44E14C = dword_44E114;
-                                        if (dword_44E158 == 1
-                                            && (abs(dword_44E110 - dword_44E150) > 10 ||
-                                                abs(dword_44E114 - dword_44E154) > 10)
-                                            && GetMessageTime() - dword_440044 > 50) {
-                                            dword_44E158 = 2;
-                                        }
-                                        if (dword_44E158 == 2) {
-                                            dword_44E158 = 3;
-                                        } else {
-                                            dword_44E118 |= 1u;
-                                            dword_44E110 = dword_44E150;
-                                            dword_44E158 = 0;
-                                            dword_44E114 = dword_44E154;
-                                        }
-                                    }
-                                    dword_44E118 &= 0xFFFFFFFB;
-                                    break;
-                                case 0x204u:
-                                    dword_44E110 = (unsigned __int16) lParam;
-                                    dword_44E118 &= 0xFFFFFFFA;
-                                    dword_44E158 = 0;
-                                    dword_44E114 = (unsigned int) lParam >> 16;
-                                    if (sub_421640(0, (unsigned __int16) lParam, (unsigned int) lParam >> 16,
-                                                   (int *) &v6) == 1) {
-                                        dword_4E60CC = dword_44E110;
-                                        dword_4E60D0 = dword_44E114;
-                                        v5 = GetMessageTime();
-                                        dword_44004C = 1;
-                                        dword_440048 = v5;
-                                    } else {
-                                        dword_44004C = 0;
-                                        dword_44E118 |= 0xAu;
-                                    }
-                                    break;
-                                case 0x205u:
-                                    dword_44E110 = (unsigned __int16) lParam;
-                                    dword_44E114 = (unsigned int) lParam >> 16;
-                                    if (dword_44004C == 1) {
-                                        if (abs(dword_4E60CC - dword_44E110) > 20
-                                            || abs(dword_4E60D0 - dword_44E114) > 20
-                                            || GetMessageTime() - dword_440048 > 120) {
-                                            dword_44004C = 0;
-                                        } else {
-                                            dword_44004C = 0;
-                                            dword_4E60C8 = 1;
-                                        }
-                                        dword_44E118 = 0;
-                                    } else {
-                                        dword_44E118 &= 0xFFFFFFF7;
-                                    }
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
-                    }
-                } else if (Msg == 512) {
-                    if (dword_44E158 == 1) {
-                        dword_44E110 = (unsigned __int16) lParam;
-                        dword_44E148 = (unsigned __int16) lParam;
-                        dword_44E114 = (unsigned int) lParam >> 16;
-                        dword_44E14C = (unsigned int) lParam >> 16;
-                        if ((abs((unsigned __int16) lParam - dword_44E150) > 10 ||
-                             abs(dword_44E114 - dword_44E154) > 10)
-                            && GetMessageTime() - dword_440044 > 50) {
-                            dword_44E158 = 2;
-                        }
-                    } else if (dword_44E158 == 2) {
-                        dword_44E110 = (unsigned __int16) lParam;
-                        dword_44E148 = (unsigned __int16) lParam;
-                        dword_44E114 = (unsigned int) lParam >> 16;
-                        dword_44E14C = (unsigned int) lParam >> 16;
-                    } else if (!(dword_44E118 & 1)) {
-                        dword_44E110 = (unsigned __int16) lParam;
-                        dword_44E114 = (unsigned int) lParam >> 16;
-                    }
-                    if (dword_44004C == 1
-                        && (abs(dword_4E60CC - dword_44E110) > 20
-                            || abs(dword_4E60D0 - dword_44E114) > 20
-                            || GetMessageTime() - dword_440048 > 120)) {
-                        dword_44004C = 2;
-                        dword_44E118 |= 8u;
-                    }
-                    dword_440040 = wParam;
-                } else if (Msg == 257 && wParam == 16) {
-                    gModifierKeyState &= 0xFFFFFFFE;
-                }
-            } else if (Msg == 256) {
-                if (!dword_44E11C) {
-                    if (wParam == 16) {
-                        gModifierKeyState |= 1u;
-                    } else if (wParam == 17) {
-                        if (!(lParam & 0x40000000))
-                            gModifierKeyState |= 2u;
-                    } else {
-                        dword_44E11C = wParam;
-                    }
-                }
-            } else if (Msg == 32) {
-                SetCursor(gWndClass.hCursor);
-                return 1;
-            }
-        } else if (Msg == 28) {
+    switch (msg) {
+        case WM_SETFOCUS:
+            dword_44E11C = 0;
+            break;
+        case WM_DESTROY:
+            sub_429AC0();
+            sub_415750();
+            destroyDDraw();
+            ReleaseMutex(gHMutex);
+            PostQuitMessage(0);
+            break;
+        case WM_PAINT:
+            BeginPaint(hWnd, &Paint);
+            if (gDD)
+                sub_416710(0);
+            EndPaint(hWnd, &Paint);
+            break;
+        case WM_ACTIVATEAPP:
             dword_5730DC = wParam;
             dword_44E11C = 0;
             if (wParam == 1) {
@@ -314,20 +192,138 @@ LRESULT WINAPI mainWindowHandler(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lPar
                 if (gDDPalette)
                     gDDPalette->SetEntries(0, 0, 256, gpPalEntries2);
             }
-        } else if (Msg == 15) {
-            BeginPaint(hWnd, &Paint);
-            if (gDD)
-                sub_416710(0);
-            EndPaint(hWnd, &Paint);
-        }
-    } else if (Msg == 7) {
-        dword_44E11C = 0;
-    } else if (Msg == 2) {
-        sub_429AC0();
-        sub_415750();
-        destroyDDraw();
-        ReleaseMutex(gHMutex);
-        PostQuitMessage(0);
+            break;
+        case WM_SETCURSOR:
+            SetCursor(gWndClass.hCursor);
+            return 1;
+        case WM_KEYDOWN:
+            if (!dword_44E11C) {
+                if (wParam == 16) {
+                    gModifierKeyState |= 1u;
+                } else if (wParam == 17) {
+                    if (!(lParam & 0x40000000))
+                        gModifierKeyState |= 2u;
+                } else {
+                    dword_44E11C = wParam;
+                }
+            }
+            break;
+        case WM_KEYUP:
+            if (wParam == VK_SHIFT) {
+                gModifierKeyState &= 0xFFFFFFFE;
+            }
+            break;
+        case WM_MOUSEMOVE:
+            if (dword_44E158 == 1) {
+                dword_44E110 = (unsigned __int16) lParam;
+                dword_44E148 = (unsigned __int16) lParam;
+                dword_44E114 = (unsigned int) lParam >> 16;
+                dword_44E14C = (unsigned int) lParam >> 16;
+                if ((abs((unsigned __int16) lParam - dword_44E150) > 10 ||
+                     abs(dword_44E114 - dword_44E154) > 10)
+                    && GetMessageTime() - dword_440044 > 50) {
+                    dword_44E158 = 2;
+                }
+            } else if (dword_44E158 == 2) {
+                dword_44E110 = (unsigned __int16) lParam;
+                dword_44E148 = (unsigned __int16) lParam;
+                dword_44E114 = (unsigned int) lParam >> 16;
+                dword_44E14C = (unsigned int) lParam >> 16;
+            } else if (!(dword_44E118 & 1)) {
+                dword_44E110 = (unsigned __int16) lParam;
+                dword_44E114 = (unsigned int) lParam >> 16;
+            }
+            if (dword_44004C == 1
+                && (abs(dword_4E60CC - dword_44E110) > 20
+                    || abs(dword_4E60D0 - dword_44E114) > 20
+                    || GetMessageTime() - dword_440048 > 120)) {
+                dword_44004C = 2;
+                dword_44E118 |= 8u;
+            }
+            dword_440040 = wParam;
+            break;
+        case WM_LBUTTONDOWN:
+            dword_44004C = 0;
+            dword_44E118 &= 0xFFFFFFF5;
+            dword_44E110 = (unsigned __int16) lParam;
+            dword_44E114 = (unsigned int) lParam >> 16;
+            if (sub_421640(0, (unsigned __int16) lParam, (unsigned int) lParam >> 16,
+                           (int *) &v6) != 1
+                || dword_4E5FAC != 1) {
+                dword_44E158 = 0;
+                dword_44E118 |= 5u;
+            } else {
+                dword_44E148 = dword_44E110;
+                dword_44E150 = dword_44E110;
+                dword_44E14C = dword_44E114;
+                dword_44E154 = dword_44E114;
+                dword_440044 = GetMessageTime();
+                dword_44E158 = 1;
+                sub_429BB0(dword_4DBCF4 + 176, dword_44E150, dword_44E154, &dword_4E60D4,
+                           &dword_4E60D8);
+            }
+            break;
+        case WM_LBUTTONUP:
+            dword_44E110 = (unsigned __int16) lParam;
+            dword_44E114 = (unsigned int) lParam >> 16;
+            if (dword_44E158) {
+                dword_44E148 = dword_44E110;
+                dword_44E14C = dword_44E114;
+                if (dword_44E158 == 1
+                    && (abs(dword_44E110 - dword_44E150) > 10 ||
+                        abs(dword_44E114 - dword_44E154) > 10)
+                    && GetMessageTime() - dword_440044 > 50) {
+                    dword_44E158 = 2;
+                }
+                if (dword_44E158 == 2) {
+                    dword_44E158 = 3;
+                } else {
+                    dword_44E118 |= 1u;
+                    dword_44E110 = dword_44E150;
+                    dword_44E158 = 0;
+                    dword_44E114 = dword_44E154;
+                }
+            }
+            dword_44E118 &= 0xFFFFFFFB;
+            break;
+        case WM_RBUTTONDOWN:
+            dword_44E110 = (unsigned __int16) lParam;
+            dword_44E118 &= 0xFFFFFFFA;
+            dword_44E158 = 0;
+            dword_44E114 = (unsigned int) lParam >> 16;
+            if (sub_421640(0, (unsigned __int16) lParam, (unsigned int) lParam >> 16,
+                           (int *) &v6) == 1) {
+                dword_4E60CC = dword_44E110;
+                dword_4E60D0 = dword_44E114;
+                v5 = GetMessageTime();
+                dword_44004C = 1;
+                dword_440048 = v5;
+            } else {
+                dword_44004C = 0;
+                dword_44E118 |= 0xAu;
+            }
+            break;
+        case WM_RBUTTONUP:
+            dword_44E110 = (unsigned __int16) lParam;
+            dword_44E114 = (unsigned int) lParam >> 16;
+            if (dword_44004C == 1) {
+                if (abs(dword_4E60CC - dword_44E110) > 20
+                    || abs(dword_4E60D0 - dword_44E114) > 20
+                    || GetMessageTime() - dword_440048 > 120) {
+                    dword_44004C = 0;
+                } else {
+                    dword_44004C = 0;
+                    dword_4E60C8 = 1;
+                }
+                dword_44E118 = 0;
+            } else {
+                dword_44E118 &= 0xFFFFFFF7;
+            }
+            break;
+        case WM_QUERYNEWPALETTE:
+            if (gDDPalette)
+                gDDPalette->SetEntries(0, 0, 256, gpPalEntries2);
+            break;
     }
-    return DefWindowProcA(hWnd, Msg, wParam, lParam);
+    return DefWindowProcA(hWnd, msg, wParam, lParam);
 }

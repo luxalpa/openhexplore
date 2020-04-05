@@ -16,6 +16,6 @@ void fillDDrawPalette();
 int showCursor(BOOL bShow);
 [[noreturn]] void exitSilently(int code);
 [[noreturn]] void exitWithFileError(int errorCode, LPCSTR lpText);
-LRESULT WINAPI mainWindowHandler(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
+LRESULT WINAPI mainWindowHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 #endif //OPENHEXPLORE_GAME_WINDOW_H
