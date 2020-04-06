@@ -41,7 +41,7 @@ signed int sub_426590() {
 
     // This is only true at the start
     if (dword_4E60E0 == -1) {
-        showCursor(0);
+        showCursor(true);
         dword_4E60E0 = 0;
     }
 
@@ -182,7 +182,7 @@ signed int sub_426590() {
         sub_406E10(dword_4EB750, 0);
         sub_406E20(dword_4EB750);
         sub_40B2A0();
-        sub_416710(0);
+        paintDDSurface(0);
         result = 1;
     } else {
         if (dword_4E5FB0 & 2)
@@ -199,7 +199,7 @@ signed int sub_426590() {
                 sub_420F90();
             }
             if (dword_4E5FAC == 1)
-                sub_416710(0);
+                paintDDSurface(0);
             sub_41E450(&gGame);
         }
         sub_422860();

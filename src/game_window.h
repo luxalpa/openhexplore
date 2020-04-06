@@ -8,8 +8,9 @@
 #include <windows.h>
 #include <ddraw.h>
 
-bool createGameWindow(HINSTANCE hInstance, int nCmdShow);
 void destroyDDraw();
+bool createGameWindow(HINSTANCE hInstance, int nCmdShow);
+void paintDDSurface(const void *img);
 LPVOID getDDrawSurfaceMemPtr();
 HRESULT releaseDDrawSurfaceMem();
 void fillDDrawPalette();

@@ -4,7 +4,7 @@
 
 #include <cstdio>
 #include <windows.h>
-#include "textdb.h"
+#include "filedb.h"
 #include "globals.h"
 #include "global_fns.h"
 #include "files.h"
@@ -31,6 +31,24 @@ void initTextDB() {
     strcpy(gText_Agility, a3.text);
     getString(gTextDBData, 104u, &a3);
     strcpy(gText_ToNextLevel, a3.text);
+}
+
+// @ 4156E0
+int initFileDB(int maxSize) {
+    if (gLoadedFiles)
+        return 0;
+    gLoadedFiles = (FileEntryStruct*) hexp_malloc(24000u);
+    if (!gLoadedFiles)
+        return 0;
+    memset(gLoadedFiles, 0, 24000u);
+    gMaxTotalSize = maxSize;
+    gCurrentTotalSize = 0;
+    dword_44CDB8 = 0;
+    dword_44CDC0 = 0;
+    dword_44CDC4 = 0;
+    gNumFiles = 0;
+    dword_44CDC8 = 0;
+    return 1;
 }
 
 // Allocates Memory for the file

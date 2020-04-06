@@ -5,6 +5,7 @@
 #include "game_window.h"
 #include "globals.h"
 #include "global_fns.h"
+#include "other.h"
 #include <ddraw.h>
 #include <cstdio>
 
@@ -15,7 +16,7 @@ bool initDDraw() {
         return false;
     if (gDD->SetCooperativeLevel(gHWnd, DDSCL_EXCLUSIVE | DDSCL_FULLSCREEN))
         return false;
-    if (gDD->SetDisplayMode(640, 480, 8))
+    if (gDD->SetDisplayMode(WINDOW_WIDTH, WINDOW_HEIGHT, 8))
         return false;
 
     DDSURFACEDESC primarySurface;
@@ -30,8 +31,8 @@ bool initDDraw() {
     DDSURFACEDESC ddsd2;
     ddsd2.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH;
     ddsd2.dwSize = sizeof(ddsd2);
-    ddsd2.dwWidth = 640;
-    ddsd2.dwHeight = 480;
+    ddsd2.dwWidth = WINDOW_WIDTH;
+    ddsd2.dwHeight = WINDOW_HEIGHT;
     ddsd2.ddsCaps.dwCaps = DDSCAPS_SYSTEMMEMORY | DDSCAPS_OFFSCREENPLAIN;
 
     if (gDD->CreateSurface(&ddsd2, &gDDS2, nullptr) != DD_OK) {
@@ -97,7 +98,45 @@ bool createGameWindow(HINSTANCE hInstance, int nCmdShow) {
     return true;
 }
 
-// @ 416850;
+// @ 416710
+void paintDDSurface(const void *img) {
+    if (!gWindowIsActive) return;
+
+    if (img) {
+        _DDSURFACEDESC surface;
+        surface.dwSize = sizeof(surface);
+        if (!gDDS2->Lock(nullptr, &surface, DDLOCK_SURFACEMEMORYPTR, nullptr)) {
+            memcpy(surface.lpSurface, img, WINDOW_WIDTH * WINDOW_HEIGHT);
+            gDDS2->Unlock(surface.lpSurface);
+        }
+    }
+
+    while (true) {
+        if (pointsTo1(dword_4EB750))
+            sub_421130(dword_44E110, dword_44E114, 1);
+        tagRECT rect;
+        DDBLTFX ddbltfx;
+
+        rect.left = 0;
+        rect.top = 0;
+        rect.right = WINDOW_WIDTH;
+        rect.bottom = WINDOW_HEIGHT;
+        memset(&ddbltfx, 0, sizeof(ddbltfx));
+        ddbltfx.dwSize = sizeof(ddbltfx);
+        HRESULT err = gPrimaryDDS->Blt(&rect, gDDS2, &rect, DDBLT_WAIT, &ddbltfx);
+        if (err == DDERR_SURFACELOST) {
+            if (gPrimaryDDS->Restore())
+                break;
+        }
+        if (err != DDERR_WASSTILLDRAWING) {
+            if (pointsTo1(dword_4EB750))
+                sub_421470(1);
+            break;
+        }
+    }
+}
+
+// @ 416850
 LPVOID getDDrawSurfaceMemPtr() {
     _DDSURFACEDESC dds;
 
@@ -141,9 +180,9 @@ int showCursor(BOOL bShow) {
 
 // @ 416A20
 [[noreturn]] void exitWithFileError(int errorCode, LPCSTR lpText) {
-    CHAR Caption[256]; // [esp+8h] [ebp-100h]
+    CHAR Caption[256];
 
-    memset(getDDrawSurfaceMemPtr(), 0, 0x4B000u);
+    memset(getDDrawSurfaceMemPtr(), 0, WINDOW_HEIGHT * WINDOW_WIDTH);
     releaseDDrawSurfaceMem();
     fillDDrawPalette();
     showCursor(1);
@@ -178,11 +217,11 @@ LRESULT WINAPI mainWindowHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPar
         case WM_PAINT:
             BeginPaint(hWnd, &Paint);
             if (gDD)
-                sub_416710(0);
+                paintDDSurface(nullptr);
             EndPaint(hWnd, &Paint);
             break;
         case WM_ACTIVATEAPP:
-            dword_5730DC = wParam;
+            gWindowIsActive = wParam;
             dword_44E11C = 0;
             if (wParam == 1) {
                 if (gPrimaryDDS)
@@ -198,9 +237,9 @@ LRESULT WINAPI mainWindowHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPar
             return 1;
         case WM_KEYDOWN:
             if (!dword_44E11C) {
-                if (wParam == 16) {
+                if (wParam == VK_SHIFT) {
                     gModifierKeyState |= 1u;
-                } else if (wParam == 17) {
+                } else if (wParam == VK_CONTROL) {
                     if (!(lParam & 0x40000000))
                         gModifierKeyState |= 2u;
                 } else {

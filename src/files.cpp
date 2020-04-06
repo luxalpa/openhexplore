@@ -6,7 +6,7 @@
 #include <fcntl.h>
 #include "global_fns.h"
 #include "globals.h"
-#include "textdb.h"
+#include "filedb.h"
 #include <windows.h>
 #include <cstdio>
 #include <io.h>

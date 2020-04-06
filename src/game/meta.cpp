@@ -8,7 +8,7 @@
 #include "../globals.h"
 #include "../global_fns.h"
 #include "../main.h"
-#include "../textdb.h"
+#include "../filedb.h"
 #include "../registry.h"
 
 template<char c>

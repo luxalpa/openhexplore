@@ -7,26 +7,8 @@
 #include "globals.h"
 #include <windows.h>
 #include "game/meta.h"
-#include "textdb.h"
+#include "filedb.h"
 #include "global_fns.h"
-
-// @ 4156E0
-int sub_4156E0(int a1) {
-    if (gLoadedFiles)
-        return 0;
-    gLoadedFiles = (FileEntryStruct*) hexp_malloc(24000u);
-    if (!gLoadedFiles)
-        return 0;
-    memset(gLoadedFiles, 0, 24000u);
-    gMaxTotalSize = a1;
-    gCurrentTotalSize = 0;
-    dword_44CDB8 = 0;
-    dword_44CDC0 = 0;
-    dword_44CDC4 = 0;
-    gNumFiles = 0;
-    dword_44CDC8 = 0;
-    return 1;
-}
 
 // @ 406760
 void resetEpisode() {

@@ -5,7 +5,6 @@
 #ifndef OPENHEXPLORE_INIT_H
 #define OPENHEXPLORE_INIT_H
 
-int sub_4156E0(int a1);
 void resetEpisode();
 int parseCmdLine(char *pLine, int (*parseArg)(char *));
 int parseCmdLineArg(char *a1);

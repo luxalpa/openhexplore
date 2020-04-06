@@ -7,7 +7,7 @@
 
 #include <windef.h>
 #include "game/meta.h"
-#include "textdb.h"
+#include "filedb.h"
 
 //inline auto sub_4060B0 = (LRESULT (WINAPI *const)(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)) 0x4060B0;
 
@@ -31,13 +31,14 @@ inline auto sub_414D30 = (int (*const)()) 0x414D30;
 inline auto sub_414E40 = (int (*const)()) 0x414E40;
 inline auto sub_415750 = (int (*const)()) 0x415750;
 inline auto sub_415E70 = (int (*const)()) 0x415E70;
-inline auto sub_416710 = (int (*const)(int)) 0x416710;
 inline auto sub_416BB0 = (int (*const)()) 0x416BB0;
 inline auto sub_416D40 = (int (*const)()) 0x416D40;
 inline auto sub_416DD0 = (int (*const)()) 0x416DD0;
 inline auto sub_41E450 = (int (*const)(Game*)) 0x41E450;
 inline auto showLogos = (int (*const)()) 0x4206C0;
 inline auto sub_420F90 = (int (*const)()) 0x420F90;
+inline auto sub_421130 = (int (*const)(int, int, int)) 0x421130;
+inline auto sub_421470 = (int (*const)(int)) 0x421470;
 inline auto sub_421640 = (int (*const)(int, int, int, int*)) 0x421640;
 inline auto sub_4227B0 = (int (*const)(int, int)) 0x4227B0;
 inline auto sub_422860 = (int (*const)()) 0x422860;

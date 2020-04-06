@@ -16,7 +16,7 @@ int __stdcall StartHexplore(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR 
         return -1;
     }
 
-    sub_4156E0(0x2000000);
+    initFileDB(0x2000000);
 
     resetEpisode();
     parseCmdLine(lpCmdLine, parseCmdLineArg);
@@ -27,7 +27,7 @@ int __stdcall StartHexplore(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR 
     initGame(&gGame);
     while (true) {
         while (!PeekMessageA(&Msg, nullptr, 0, 0, 0)) {
-            if (dword_5730DC | 1) {
+            if (gWindowIsActive) {
                 if (!sub_426590()) {
                     SendMessageA(gHWnd, WM_DESTROY, 0, 0);
                 }

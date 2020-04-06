@@ -7,6 +7,8 @@
 
 #include "interop/interop.hpp"
 
+#define WINDOW_WIDTH 640
+#define WINDOW_HEIGHT 480
 
 #define dword_440040        GLOB(0x440040, int)
 #define dword_440044        GLOB(0x440044, int)
@@ -105,7 +107,7 @@
 #define dword_4EB750        ADDR(0x4EB750, int)
 #define gGame               GLOB(0x4EB780, Game)
 
-#define dword_5730DC        GLOB(0x5730DC, int)
+#define gWindowIsActive     GLOB(0x5730DC, int)
 #define gHWnd               GLOB(0x5730E0, HWND)
 #define gpPalEntries2       ADDR(0x5730F0, PALETTEENTRY) // 0x100 elements
 #define gClipper            GLOB(0x5734F0, IDirectDrawClipper*)
