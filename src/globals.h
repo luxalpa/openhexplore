@@ -45,6 +45,8 @@
 #define dword_44E118        GLOB(0x44E118, int)
 #define dword_44E11C        GLOB(0x44E11C, int)
 #define gModifierKeyState        GLOB(0x44E120, int) // Modifier keys pressed?
+#define dword_44E128        GLOB(0x44E128, int)
+#define dword_44E12C        GLOB(0x44E12C, int)
 #define dword_44E148        GLOB(0x44E148, int)
 #define dword_44E14C        GLOB(0x44E14C, int)
 #define dword_44E150        GLOB(0x44E150, int)
@@ -55,6 +57,7 @@
 #define dword_44E400        ADDR(0x44E400, int)
 #define dword_44F340        ADDR(0x44F340, int)
 
+#define showLogosInternalState  GLOB(0x4D5D70, int)
 #define dword_4DBCBC        GLOB(0x4DBCBC, int)
 #define dword_4DBCC0        GLOB(0x4DBCC0, int)
 #define dword_4DBCC4        GLOB(0x4DBCC4, int)

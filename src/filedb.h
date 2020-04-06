@@ -22,6 +22,7 @@ void initTextDB();
 int initFileDB(int maxSize);
 char * allocFile(size_t fileSize, int flags);
 LRESULT keycodeHandler(UINT msg, WPARAM wparam, LPARAM lparam);
+int sub_415B40();
 void loadFile(LPCSTR filePath, char **destination, bool isEncrypted);
 void getString(char *fileData, unsigned int entryID, struc_2 *output);
 bool convertToGamePath(char *relPath);

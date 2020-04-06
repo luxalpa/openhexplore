@@ -78,7 +78,7 @@ namespace Files {
     }
 
     // @ 407020
-    bool exists(char *fileName) {
+    bool exists(const char *fileName) {
         int fh = _open(fileName, _O_BINARY);
         if (fh == -1)
             return false;

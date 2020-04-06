@@ -8,6 +8,7 @@
 #include "../globals.h"
 #include "meta.h"
 #include "../global_fns.h"
+#include "../logos.h"
 
 // @ 414C80
 void playVideo(PlayVideoMode mode, int episode, int level) {

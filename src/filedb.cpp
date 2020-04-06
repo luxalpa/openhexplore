@@ -37,7 +37,7 @@ void initTextDB() {
 int initFileDB(int maxSize) {
     if (gLoadedFiles)
         return 0;
-    gLoadedFiles = (FileEntryStruct*) hexp_malloc(24000u);
+    gLoadedFiles = (FileEntryStruct *) hexp_malloc(24000u);
     if (!gLoadedFiles)
         return 0;
     memset(gLoadedFiles, 0, 24000u);
@@ -177,6 +177,15 @@ LRESULT keycodeHandler(UINT msg, WPARAM wparam, LPARAM lparam) {
             return FALSE;
     }
     return result;
+}
+
+int sub_415B40() {
+    if (dword_44CDD0 == dword_44CDCC)
+        return 0;
+
+    int v0 = dword_4EA2E0[dword_44CDD0];
+    dword_44CDD0 = (dword_44CDD0 + 1) % 10;
+    return v0;
 }
 
 // @ 416000

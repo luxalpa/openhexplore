@@ -19,7 +19,7 @@ namespace Files {
 
     bool close(int fd);
 
-    bool exists(char *fileName);
+    bool exists(const char *fileName);
 
     bool read(int fd, void *buffer, unsigned int len);
 }
