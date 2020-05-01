@@ -60,8 +60,7 @@ int parseCmdLineArg(char *a1) {
     int level; // [esp+8h] [ebp-4h]
 
     _strupr(a1);
-    if ( *a1 == 'E' && sscanf(a1, "E%dL%d", &episode, &level) == 2 )
-    {
+    if ( *a1 == 'E' && sscanf(a1, "E%dL%d", &episode, &level) == 2 ) {
         gGame.episode = episode;
         gGame.level = level;
         gGame.field_8 = 0;

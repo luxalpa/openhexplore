@@ -15,12 +15,13 @@ struct FileEntryStruct {
     char *pData;
     int size;
     short flags;
-    short isInUse;
+    short isInUse; // TODO: This can also equal 2
 };
 
 void initTextDB();
 int initFileDB(int maxSize);
 char * allocFile(size_t fileSize, int flags);
+void deallocFile(char *pFileData);
 LRESULT keycodeHandler(UINT msg, WPARAM wparam, LPARAM lparam);
 int sub_415B40();
 void loadFile(LPCSTR filePath, char **destination, bool isEncrypted);

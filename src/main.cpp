@@ -27,7 +27,7 @@ int __stdcall StartHexplore(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR 
     initGame(&gGame);
     while (true) {
         while (!PeekMessageA(&Msg, nullptr, 0, 0, 0)) {
-            if (gWindowIsActive) {
+            if (gIsWindowActive) {
                 if (!sub_426590()) {
                     SendMessageA(gHWnd, WM_DESTROY, 0, 0);
                 }

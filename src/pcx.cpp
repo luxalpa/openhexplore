@@ -9,6 +9,7 @@
 #include "global_fns.h"
 #include "files.h"
 #include "globals.h"
+#include "game_window.h"
 
 // @ 0x401000
 
@@ -33,10 +34,9 @@ struct PCXHeader {
     char reserved2[54];
 };
 
-bool loadPCXFile(LPCSTR fileName, char **ppData, char **ppPaletteData, int *pWidth, int *pHeight) {
-
+bool loadPCXFile(LPCSTR fileName, char **ppData, HexpPaletteEntry **ppPaletteData, int *pWidth, int *pHeight) {
     *ppData = nullptr;
-    *ppPaletteData = 0;
+    *ppPaletteData = nullptr;
     *pWidth = 0;
     *pHeight = 0;
 
@@ -59,7 +59,7 @@ bool loadPCXFile(LPCSTR fileName, char **ppData, char **ppPaletteData, int *pWid
 
     if (header->magicValue != 0xA || header->version != 5 || !header->isEncoded ||
         header->colorDepth != 8) {
-        sub_415900((int *) pData);
+        deallocFile(pData);
         return 0;
     }
 
@@ -75,15 +75,15 @@ bool loadPCXFile(LPCSTR fileName, char **ppData, char **ppPaletteData, int *pWid
     for (int y = 0; y < height; y++) {
         int x = 0;
         while (x < width) {
-            unsigned char curByte = *pImage;
-            if (curByte > 192) {
-                unsigned char runLength = curByte - 192;
+            char curByte = *pImage;
+            if ((curByte & 0xC0) == 0xC0) {
+                char runLength = curByte - 192;
 
                 pImage++;
-                unsigned char color = *pImage;
+                char color = *pImage;
 
                 x += runLength;
-                for(int i = 0; i < runLength; i++) {
+                for (int i = 0; i < runLength; i++) {
                     if (dest < area + *ppData)
                         *dest = color;
                     ++dest;
@@ -100,14 +100,12 @@ bool loadPCXFile(LPCSTR fileName, char **ppData, char **ppPaletteData, int *pWid
         dest += (width - header->numPlaneBytes);
     }
 
-    *ppPaletteData = allocFile(0x300, 0x8001);
+    *ppPaletteData = (HexpPaletteEntry*) allocFile(0x300, 0x8001);
     memcpy(*ppPaletteData, pImage + 1, 0x300u);
-
-
 
     *pWidth = width;
     *pHeight = height;
 
-    sub_415900((int *) pData);
+    deallocFile(pData);
     return true;
 }

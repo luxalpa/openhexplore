@@ -5,6 +5,10 @@
 #ifndef OPENHEXPLORE_LOGOS_H
 #define OPENHEXPLORE_LOGOS_H
 
-signed int showLogos();
+#include "game_window.h"
+
+void showPCX(char *filename, HexpPaletteEntry **pImagePalette);
+void adjustPaletteBrightness(HexpPaletteEntry *srcPalette, HexpPaletteEntry *targetPalette, float brightness);
+bool showLogos();
 
 #endif //OPENHEXPLORE_LOGOS_H

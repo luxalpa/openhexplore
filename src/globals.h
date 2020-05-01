@@ -24,7 +24,7 @@
 #define gLoadedFiles        GLOB(0x44CDAC, FileEntryStruct *) // Lots of memory (24k)
 #define gMaxTotalSize       GLOB(0x44CDB0, int)
 #define gCurrentTotalSize   GLOB(0x44CDB4, int)
-#define dword_44CDB8        GLOB(0x44CDB8, int)
+#define dword_44CDB8        GLOB(0x44CDB8, int) // possibly some other kind of currentTotalSize
 #define gNumFiles           GLOB(0x44CDBC, int)
 #define dword_44CDC0        GLOB(0x44CDC0, int) // Possibly max size ever used?
 #define dword_44CDC4        GLOB(0x44CDC4, int)
@@ -39,14 +39,14 @@
 #define gPrimaryDDS         GLOB(0x44E0F8, IDirectDrawSurface*)
 #define gDDS2               GLOB(0x44E0FC, IDirectDrawSurface*)
 #define gDDPalette          GLOB(0x44E100, IDirectDrawPalette*)
-#define byte_44E104         GLOB(0x44E104, BOOL)
+#define gIsPaletteInitialized   GLOB(0x44E104, bool)
 #define dword_44E110        GLOB(0x44E110, int)
 #define dword_44E114        GLOB(0x44E114, int)
 #define dword_44E118        GLOB(0x44E118, int)
 #define dword_44E11C        GLOB(0x44E11C, int)
-#define gModifierKeyState        GLOB(0x44E120, int) // Modifier keys pressed?
-#define dword_44E128        GLOB(0x44E128, int)
-#define dword_44E12C        GLOB(0x44E12C, int)
+#define gModifierKeyState   GLOB(0x44E120, int) // Modifier keys pressed?
+#define gWindowWidth        GLOB(0x44E128, int) // = 640
+#define gWindowHeight       GLOB(0x44E12C, int) // = 480
 #define dword_44E148        GLOB(0x44E148, int)
 #define dword_44E14C        GLOB(0x44E14C, int)
 #define dword_44E150        GLOB(0x44E150, int)
@@ -57,7 +57,6 @@
 #define dword_44E400        ADDR(0x44E400, int)
 #define dword_44F340        ADDR(0x44F340, int)
 
-#define showLogosInternalState  GLOB(0x4D5D70, int)
 #define dword_4DBCBC        GLOB(0x4DBCBC, int)
 #define dword_4DBCC0        GLOB(0x4DBCC0, int)
 #define dword_4DBCC4        GLOB(0x4DBCC4, int)
@@ -105,12 +104,12 @@
 #define dword_4EA2D8        GLOB(0x4EA2D8, int)
 #define dword_4EA2E0        ADDR(0x4EA2E0, int) // 10 elements
 #define dword_4EA308        ADDR(0x4EA308, int) // 10 elements
-#define dword_4EA330        ADDR(0x4EA330, int) // 0x80 elements; begin keycodes
+#define dword_4EA330        ADDR(0x4EA330, int) // 0x20 elements; begin keycodes
 #define dword_4EA3B0        GLOB(0x4EA3B0, int)
 #define dword_4EB750        ADDR(0x4EB750, int)
 #define gGame               GLOB(0x4EB780, Game)
 
-#define gWindowIsActive     GLOB(0x5730DC, int)
+#define gIsWindowActive     GLOB(0x5730DC, int)
 #define gHWnd               GLOB(0x5730E0, HWND)
 #define gpPalEntries2       ADDR(0x5730F0, PALETTEENTRY) // 0x100 elements
 #define gClipper            GLOB(0x5734F0, IDirectDrawClipper*)

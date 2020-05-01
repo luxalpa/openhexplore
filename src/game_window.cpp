@@ -100,7 +100,7 @@ bool createGameWindow(HINSTANCE hInstance, int nCmdShow) {
 
 // @ 416710
 void paintDDSurface(const void *img) {
-    if (!gWindowIsActive) return;
+    if (!gIsWindowActive) return;
 
     if (img) {
         _DDSURFACEDESC surface;
@@ -156,9 +156,36 @@ HRESULT releaseDDrawSurfaceMem() {
     return result;
 }
 
+// @ 4168D0
+void initDDrawPalette(HexpPaletteEntry *palette) {
+    if (!gIsPaletteInitialized) {
+        HDC dc = GetDC(gHWnd);
+        GetSystemPaletteEntries(dc, 0, 0x100u, gpPalEntries);
+        ReleaseDC(gHWnd, dc);
+        gIsPaletteInitialized = true;
+    }
+    if (palette) {
+        for(int i = 0; i < 0x100; i++) {
+            PALETTEENTRY *entry = &gpPalEntries2[i];
+            HexpPaletteEntry *source = &palette[i];
+
+            entry->peRed = source->red;
+            entry->peGreen = source->green;
+            entry->peBlue = source->blue;
+            entry->peFlags = 5;
+        }
+    }
+    if (gDDPalette) {
+        gDDPalette->SetEntries(0, 0, 0x100, gpPalEntries2);
+    } else {
+        gDD->CreatePalette(DDPCAPS_ALLOW256 | DDPCAPS_8BIT, gpPalEntries2, &gDDPalette, nullptr);
+        gPrimaryDDS->SetPalette(gDDPalette);
+    }
+}
+
 // @ 4169A0
 void fillDDrawPalette() {
-    if (byte_44E104 == TRUE) {
+    if (gIsPaletteInitialized == TRUE) {
         if (gDDPalette) {
             gDDPalette->SetEntries(0, 0, 256, gpPalEntries);
             memcpy(gpPalEntries2, gpPalEntries, 0x400u);
@@ -221,9 +248,9 @@ LRESULT WINAPI mainWindowHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPar
             EndPaint(hWnd, &Paint);
             break;
         case WM_ACTIVATEAPP:
-            gWindowIsActive = wParam;
+            gIsWindowActive = wParam;
             dword_44E11C = 0;
-            if (wParam == 1) {
+            if (gIsWindowActive) {
                 if (gPrimaryDDS)
                     gPrimaryDDS->Restore();
                 if (gDDS2)

@@ -98,6 +98,36 @@ char *allocFile(size_t fileSize, int flags) {
     return currentEntry->pData;
 }
 
+FileEntryStruct *findFile(const char *const ptr) {
+    for(int i = 0; i < 2000; i++) {
+        FileEntryStruct *file = &gLoadedFiles[i];
+        if(file->isInUse && file->pData == ptr && file->flags & 0x8000) {
+            return file;
+        }
+    }
+    return nullptr;
+}
+
+// @ 415900
+void deallocFile(char *pFileData) {
+    if (!pFileData) return;
+
+    auto fs = findFile(pFileData);
+    hexp_free(fs->pData);
+
+    if (fs->isInUse == 1)
+        gCurrentTotalSize -= fs->size;
+
+    if (fs->isInUse == 2)
+        dword_44CDB8 -= fs->size;
+
+    --gNumFiles;
+    fs->pData = 0;
+    fs->size = 0;
+    fs->flags = 0;
+    fs->isInUse = 0;
+}
+
 // @ 4159A0
 LRESULT keycodeHandler(UINT msg, WPARAM wparam, LPARAM lparam) {
     unsigned int result; // eax
