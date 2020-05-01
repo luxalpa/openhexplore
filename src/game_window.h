@@ -19,7 +19,7 @@ bool createGameWindow(HINSTANCE hInstance, int nCmdShow);
 void paintDDSurface(const void *img);
 LPVOID getDDrawSurfaceMemPtr();
 HRESULT releaseDDrawSurfaceMem();
-void initDDrawPalette(HexpPaletteEntry *palette);
+void initDDrawPalette(const HexpPaletteEntry *palette);
 void fillDDrawPalette();
 int showCursor(BOOL bShow);
 [[noreturn]] void exitSilently(int code);

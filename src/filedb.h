@@ -5,6 +5,8 @@
 #ifndef OPENHEXPLORE_FILEDB_H
 #define OPENHEXPLORE_FILEDB_H
 
+#include <windows.h>
+
 struct struc_2 {
     char *text;
     int field_4;
@@ -19,11 +21,10 @@ struct FileEntryStruct {
 };
 
 void initTextDB();
-int initFileDB(int maxSize);
+bool initFileDB(int maxSize);
 char * allocFile(size_t fileSize, int flags);
 void deallocFile(char *pFileData);
-LRESULT keycodeHandler(UINT msg, WPARAM wparam, LPARAM lparam);
-int sub_415B40();
+
 void loadFile(LPCSTR filePath, char **destination, bool isEncrypted);
 void getString(char *fileData, unsigned int entryID, struc_2 *output);
 bool convertToGamePath(char *relPath);

@@ -27,28 +27,29 @@ void playVideo(PlayVideoMode mode, int episode, int level) {
 }
 
 // @ 426590;
-signed int sub_426590() {
-    signed int result; // eax
+bool sub_426590() {
     int v1; // eax
     unsigned int v2; // eax
     int v3; // eax
     int *v4; // ecx
     int v5; // eax
 
+    static int introState = -1;
+
     if (dword_4E5FA8) {
         // Set at the end of the program when pressing quit
-        return 0;
+        return false;
     }
 
     // This is only true at the start
-    if (dword_4E60E0 == -1) {
+    if (introState == -1) {
         showCursor(true);
-        dword_4E60E0 = 0;
+        introState = 0;
     }
 
-    if (dword_4E60E0 == 0) {
-        if (showLogos() == 1)
-            return 1;
+    if (introState == 0) {
+        if (showLogos())
+            return true;
 
         // Reached after the 2 logo screens
         dword_4DBCF4 = (int) &dword_4DBD00;
@@ -57,10 +58,9 @@ signed int sub_426590() {
         dword_4E5FAC = 1;
         sub_429620(); // Shows Hexplore Screen
         playVideo(PlayVideoMode::GameIntro, 0, 0);
-        result = 1;
         dword_4E5FB8 = 2;
-        dword_4E60E0 = 1;
-        return result;
+        introState = 1;
+        return true;
     }
 
     // Reached only after the Hexplore Splash Screen
@@ -73,12 +73,14 @@ signed int sub_426590() {
         case 2:
             // Videos
             sub_414D30();
-            return 1;
+            return true;
         case 3:
             // Credits
             sub_414E40();
-            return 1;
+            return true;
     }
+
+
     if (!dword_4E5FB8 && sub_40A9F0()) {
         if (dword_4DBCF8 == -1) {
             v1 = *(int *) (dword_4DBCF4 + 248);
@@ -184,7 +186,6 @@ signed int sub_426590() {
         sub_406E20(dword_4EB750);
         sub_40B2A0();
         paintDDSurface(0);
-        result = 1;
     } else {
         if (dword_4E5FB0 & 2)
             sub_40EA00(&dword_4DBD00, dword_4DBCF4);
@@ -216,7 +217,6 @@ signed int sub_426590() {
                 dword_4E60DC = -1;
             }
         }
-        result = 1;
     }
-    return result;
+    return true;
 }

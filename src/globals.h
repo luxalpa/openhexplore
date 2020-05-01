@@ -29,8 +29,8 @@
 #define dword_44CDC0        GLOB(0x44CDC0, int) // Possibly max size ever used?
 #define dword_44CDC4        GLOB(0x44CDC4, int)
 #define dword_44CDC8        GLOB(0x44CDC8, int) // Possibly max number of files we had?
-#define dword_44CDCC        GLOB(0x44CDCC, int)
-#define dword_44CDD0        GLOB(0x44CDD0, int)
+#define gKeyCacheIdx        GLOB(0x44CDCC, int)
+#define gKeyCacheIdxLastKey        GLOB(0x44CDD0, int)
 #define dword_44CDD4        GLOB(0x44CDD4, int)
 #define dword_44CDD8        GLOB(0x44CDD8, int)
 #define dword_44CDDC        GLOB(0x44CDDC, int)
@@ -96,15 +96,15 @@
 #define dword_4E60D4        GLOB(0x4E60D4, int)
 #define dword_4E60D8        GLOB(0x4E60D8, int)
 #define dword_4E60DC        GLOB(0x4E60DC, int) // = -1
-#define dword_4E60E0        GLOB(0x4E60E0, int) // = -1
+//#define dword_4E60E0        GLOB(0x4E60E0, int) // = -1
 #define dword_4E60EC        GLOB(0x4E60EC, int) // = -1
 
 // All data after 004E7000 is not part of the .exe
 
-#define dword_4EA2D8        GLOB(0x4EA2D8, int)
-#define dword_4EA2E0        ADDR(0x4EA2E0, int) // 10 elements
+#define dword_4EA2D8        GLOB(0x4EA2D8, int) // Flags of keys pressed (in dword_4EA330)
+#define gKeyCache        ADDR(0x4EA2E0, int) // 10 elements
 #define dword_4EA308        ADDR(0x4EA308, int) // 10 elements
-#define dword_4EA330        ADDR(0x4EA330, int) // 0x20 elements; begin keycodes
+#define gTrackedKeyStates   ADDR(0x4EA330, int) // 0x20 elements; begin keycodes
 #define dword_4EA3B0        GLOB(0x4EA3B0, int)
 #define dword_4EB750        ADDR(0x4EB750, int)
 #define gGame               GLOB(0x4EB780, Game)

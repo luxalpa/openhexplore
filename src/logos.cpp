@@ -4,12 +4,11 @@
 
 #include <windows.h>
 #include <cstdio>
-#include "logos.h"
 #include "globals.h"
 #include "global_fns.h"
 #include "game_window.h"
-#include "files.h"
 #include "pcx.h"
+#include "keys.h"
 
 void showPCX(char *filename, HexpPaletteEntry **pImagePalette) {
     char *imageData;
@@ -42,21 +41,6 @@ void adjustPaletteBrightness(HexpPaletteEntry *srcPalette, HexpPaletteEntry *tar
 
 // @ 4206C0
 bool showLogos() {
-    int v7; // eax
-    char *v8; // ecx
-    __int16 v9; // si
-    signed int v10; // edx
-    char *v11; // eax
-    int v12; // eax
-    char *v13; // edx
-    char *v14; // esi
-    signed int v15; // ecx
-    int v16; // eax
-    char *v17; // ecx
-    __int16 v18; // si
-    signed int v19; // edx
-    char *v20; // eax
-
     HexpPaletteEntry palette[0x100];
 
     // @ 4D5D70
@@ -67,7 +51,7 @@ bool showLogos() {
     static int initialTickCount;
 
     int tickCount = GetTickCount();
-    int keyCode = sub_415B40();
+    int keyCode = processKey();
 
     switch (state) {
         case 0:
@@ -129,7 +113,7 @@ bool showLogos() {
                 if (brightness > 1) {
                     brightness = 1;
                     initialTickCount = tickCount;
-                    state = 4;
+                    state = 6;
                 }
 
                 adjustPaletteBrightness(pImagePalette, palette, 1.0 - brightness);
@@ -155,21 +139,15 @@ bool showLogos() {
             if (keyCode == VK_ESCAPE) {
                 state = 10;
             } else {
-                v12 = (signed int) ((tickCount - initialTickCount) << 8) / 1000;
-                if (v12 > 256) {
-                    v12 = 256;
+                float brightness = (tickCount - initialTickCount) / 1000.0;
+                if (brightness > 1) {
+                    brightness = 1;
                     initialTickCount = tickCount;
                     state = 8;
                 }
-                v13 = (char*)pImagePalette;
-                v14 = (char *) palette;
-                v15 = 768;
-                do {
-                    ++v13;
-                    ++v14;
-                    --v15;
-                    *(v14 - 1) = (unsigned __int16) (v12 * *(unsigned __int8 *) (v13 - 1)) >> 8;
-                } while (v15);
+
+                adjustPaletteBrightness(pImagePalette, palette, brightness);
+
                 initDDrawPalette(palette);
                 paintDDSurface(nullptr);
             }
@@ -178,7 +156,7 @@ bool showLogos() {
             if (keyCode == VK_ESCAPE) {
                 state = 10;
             } else {
-                if ((signed int) (tickCount - initialTickCount) > 1000) {
+                if ((tickCount - initialTickCount) > 1000) {
                     state = 9;
                     initialTickCount = tickCount;
                 }
@@ -189,28 +167,22 @@ bool showLogos() {
             if (keyCode == VK_ESCAPE) {
                 state = 10;
             } else {
-                v16 = (signed int) ((tickCount - initialTickCount) << 8) / 1000;
-                if (v16 > 256) {
-                    v16 = 256;
+                float brightness = (tickCount - initialTickCount) / 1000.0;
+                if (brightness > 1) {
+                    brightness = 1;
                     initialTickCount = tickCount;
                     state = 10;
                 }
-                v17 = (char *) palette;
-                v18 = 256 - v16;
-                v19 = 768;
-                v20 = (char*)pImagePalette;
-                do {
-                    ++v20;
-                    ++v17;
-                    --v19;
-                    *(v17 - 1) = (unsigned __int16) (v18 * *(unsigned __int8 *) (v20 - 1)) >> 8;
-                } while (v19);
+
+                adjustPaletteBrightness(pImagePalette, palette, 1.0 - brightness);
+
                 initDDrawPalette(palette);
                 paintDDSurface(nullptr);
             }
             break;
         case 10:
             deallocFile((char *) pImagePalette);
+
             memset(palette, 0, sizeof(palette));
             initDDrawPalette(palette);
             memset(getDDrawSurfaceMemPtr(), 0, gWindowWidth * gWindowHeight);

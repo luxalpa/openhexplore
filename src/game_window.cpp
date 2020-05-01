@@ -6,6 +6,7 @@
 #include "globals.h"
 #include "global_fns.h"
 #include "other.h"
+#include "keys.h"
 #include <ddraw.h>
 #include <cstdio>
 
@@ -157,7 +158,7 @@ HRESULT releaseDDrawSurfaceMem() {
 }
 
 // @ 4168D0
-void initDDrawPalette(HexpPaletteEntry *palette) {
+void initDDrawPalette(const HexpPaletteEntry *palette) {
     if (!gIsPaletteInitialized) {
         HDC dc = GetDC(gHWnd);
         GetSystemPaletteEntries(dc, 0, 0x100u, gpPalEntries);
@@ -167,7 +168,7 @@ void initDDrawPalette(HexpPaletteEntry *palette) {
     if (palette) {
         for(int i = 0; i < 0x100; i++) {
             PALETTEENTRY *entry = &gpPalEntries2[i];
-            HexpPaletteEntry *source = &palette[i];
+            const HexpPaletteEntry *source = &palette[i];
 
             entry->peRed = source->red;
             entry->peGreen = source->green;
