@@ -5,6 +5,8 @@
 #ifndef OPENHEXPLORE_META_H
 #define OPENHEXPLORE_META_H
 
+#include <windows.h>
+
 struct Game {
     int episode;
     int level;
@@ -28,5 +30,6 @@ bool setRegistryValue(
 );
 
 void initGame(Game *game);
+bool convertToGamePath(char *relPath);
 
 #endif //OPENHEXPLORE_META_H

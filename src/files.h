@@ -22,6 +22,10 @@ namespace Files {
     bool exists(const char *fileName);
 
     bool read(int fd, void *buffer, unsigned int len);
+
+    int seek(int fd, int offset, int origin);
+
+    void *getContents(const char *filename, unsigned int *pSize, int flags);
 }
 
 #endif //OPENHEXPLORE_FILES_H

@@ -7,6 +7,6 @@
 
 LRESULT keycodeHandler(UINT msg, WPARAM wparam, LPARAM lparam);
 int processKey();
-bool trackKey(int keyCode, unsigned int bit);
+bool trackKey(int keyCode, char bit);
 
 #endif //OPENHEXPLORE_KEYS_H

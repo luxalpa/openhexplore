@@ -12,5 +12,6 @@ enum class PlayVideoMode {
 
 void playVideo(PlayVideoMode mode, int episode, int level);
 bool sub_426590();
+int sub_429620();
 
 #endif //OPENHEXPLORE_RUN_H

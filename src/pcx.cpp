@@ -51,7 +51,7 @@ bool loadPCXFile(LPCSTR fileName, char **ppData, HexpPaletteEntry **ppPaletteDat
     if (!size)
         return 0;
 
-    char *pData = allocFile(size, 0x8001);
+    char *pData = (char*)allocFile(size, 0x8001);
     Files::read(fd, pData, size);
     Files::close(fd);
 
@@ -69,7 +69,7 @@ bool loadPCXFile(LPCSTR fileName, char **ppData, HexpPaletteEntry **ppPaletteDat
     int area = width * height;
     char *pImage = pData + 0x80;
 
-    char *dest = allocFile(width * height, 0x8001);
+    char *dest = (char*)allocFile(width * height, 0x8001);
     *ppData = dest;
 
     for (int y = 0; y < height; y++) {

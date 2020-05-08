@@ -2,14 +2,15 @@
 // Created by Smaug on 2020-04-02.
 //
 
+#include <sys/stat.h>
 #include <Windows.h>
 #include <cstdio>
 #include "meta.h"
 #include "../globals.h"
 #include "../global_fns.h"
-#include "../main.h"
 #include "../filedb.h"
 #include "../registry.h"
+#include "../files.h"
 
 template<char c>
 struct encrypt {
@@ -22,6 +23,8 @@ template<char... Chars>
 struct EncryptCharsA {
     static char value[sizeof...(Chars) + 1];
 };
+
+bool convertToGamePath(char *relPath);
 
 template<char... Chars>
 char EncryptCharsA<Chars...>::value[sizeof...(Chars) + 1] = {
@@ -96,4 +99,18 @@ void initGame(Game *game) {
         game->level = 0;
         game->field_8 = 0;
     }
+}
+
+// Converts the provided parameter and replaces it inplace with the full path to the game
+// @ 417090
+bool convertToGamePath(char *relPath) {
+    char filePath[0x100];
+    sprintf(filePath, "%s\\%s", gGame.directory, relPath);
+    if (Files::exists(filePath)) {
+        strcpy(relPath, filePath);
+        return true;
+    }
+    sprintf(filePath, "%s\\%s", gGame.directory2, relPath);
+    strcpy(relPath, filePath);
+    return false;
 }

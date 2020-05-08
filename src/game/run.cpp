@@ -9,11 +9,15 @@
 #include "meta.h"
 #include "../global_fns.h"
 #include "../logos.h"
+#include "../keys.h"
+#include "../sound.h"
+#include "../sounddb.h"
 
 // @ 414C80
 void playVideo(PlayVideoMode mode, int episode, int level) {
     if (mode == PlayVideoMode::LevelVideo) {
-        sprintf(gCurrentVideoPath, "%s\\%s\\%s\\%s%01d%s%02d%s", "SAMPLE", gLangPrefix, "video", "E", episode, "L", level,
+        sprintf(gCurrentVideoPath, "%s\\%s\\%s\\%s%01d%s%02d%s", "SAMPLE", gLangPrefix, "video", "E", episode, "L",
+                level,
                 ".SMK");
         convertToGamePath(gCurrentVideoPath);
         dword_4E5FAC = 2;
@@ -219,4 +223,61 @@ bool sub_426590() {
         }
     }
     return true;
+}
+
+// @ 429620
+int sub_429620() {
+    initDirectSound(0, 0x180000);
+
+    loadSoundbankHeaders();
+    loadTxtSmpBin();
+    initSoundBuffer(102400);
+
+    dword_4EB77C = static_cast<char *>(allocFile(192000, 0x8001));
+
+    loadFonts();
+
+    sub_415D80(); // TODO: Find out wtf this is // sets dword_4E6198 to 397425
+    showHexploreLogo();
+
+    gMusicSmpBinPos = loadMusicSmpBin();
+    gSysSmpBinPos = loadSysSmpBin();
+
+    sub_40A650(gSysSmpBinPos, 5);
+
+    sub_40C810();
+    sub_415CE0();
+    sub_415D30();
+    sub_414530();
+    sub_420130(&dword_4DBCE8, 0x6000);
+    sub_4089E0();
+    sub_409050();
+    sub_406B60(dword_4EB750);
+    sub_40B7E0();
+    sub_410E10(&gGame);
+    sub_425700(&gGame);
+    sub_4112A0(&gGame);
+    sub_417DB0();
+    sub_4257D0(&gGame);
+    sub_40C830(&gGame);
+
+    trackKey(VK_LEFT, 0);
+    trackKey(VK_UP, 1);
+    trackKey(VK_RIGHT, 2);
+    trackKey(VK_DOWN, 3);
+    trackKey(VK_INSERT, 4);
+    trackKey(VK_HOME, 5);
+    trackKey(VK_PRIOR, 6);
+    trackKey(VK_DELETE, 7);
+    trackKey(VK_END, 8);
+    trackKey(VK_NEXT, 9);
+
+    sub_40B760(&Fnt16);
+    sub_40B770(-10);
+
+    int initialTickCount = GetTickCount();
+    while (GetTickCount() < initialTickCount + 1500);
+
+    sub_420480();
+    return sub_420170(&gGame);
 }

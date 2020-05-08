@@ -10,6 +10,33 @@
 #include "pcx.h"
 #include "keys.h"
 
+// @ 4205E0
+void showHexploreLogo() {
+    HexpPaletteEntry *pImgPalette;
+    char *pData;
+    int width;
+    int height;
+    char filename[0x100];
+    HexpPaletteEntry systemPalette[256];
+
+    sprintf(filename, "%s\\%s", "clut", "logo256.pcx");
+    convertToGamePath(filename);
+
+    if (loadPCXFile(filename, &pData, &pImgPalette, &width, &height)) {
+        memset(systemPalette, 0, sizeof(systemPalette));
+        initDDrawPalette(systemPalette);
+
+        memcpy(getDDrawSurfaceMemPtr(), pData, gWindowWidth * gWindowHeight);
+
+        initDDrawPalette(pImgPalette);
+        releaseDDrawSurfaceMem();
+        paintDDSurface(nullptr);
+
+        deallocFile(pImgPalette);
+        deallocFile(pData);
+    }
+}
+
 void showPCX(char *filename, HexpPaletteEntry **pImagePalette) {
     char *imageData;
 
@@ -29,7 +56,7 @@ void showPCX(char *filename, HexpPaletteEntry **pImagePalette) {
 }
 
 void adjustPaletteBrightness(HexpPaletteEntry *srcPalette, HexpPaletteEntry *targetPalette, float brightness) {
-    for(int i = 0; i < 0x100; i++) {
+    for (int i = 0; i < 0x100; i++) {
         HexpPaletteEntry srcColor = srcPalette[i];
         targetPalette[i] = {
                 .red = static_cast<unsigned char>(brightness * srcColor.red),
@@ -46,7 +73,7 @@ bool showLogos() {
     // @ 4D5D70
     static int state = 0;
     // @ 4EA3D0
-    static HexpPaletteEntry* pImagePalette;
+    static HexpPaletteEntry *pImagePalette;
     // @ 4EA3D4
     static int initialTickCount;
 
@@ -123,7 +150,7 @@ bool showLogos() {
             }
             break;
         case 6: {
-            deallocFile((char*)pImagePalette);
+            deallocFile((char *) pImagePalette);
 
             memset(palette, 0, sizeof(palette));
             initDDrawPalette(palette);

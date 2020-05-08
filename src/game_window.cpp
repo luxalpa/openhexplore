@@ -11,6 +11,7 @@
 #include <cstdio>
 
 #pragma comment(lib, "ddraw.lib")
+#pragma comment(lib, "dsound.lib")
 
 bool initDDraw() {
     if (DirectDrawCreate(nullptr, &gDD, nullptr))

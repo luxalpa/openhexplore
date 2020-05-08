@@ -7,6 +7,7 @@
 
 #include "game_window.h"
 
+void showHexploreLogo();
 void showPCX(char *filename, HexpPaletteEntry **pImagePalette);
 void adjustPaletteBrightness(HexpPaletteEntry *srcPalette, HexpPaletteEntry *targetPalette, float brightness);
 bool showLogos();
