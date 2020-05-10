@@ -214,7 +214,7 @@ int showCursor(BOOL bShow) {
     memset(getDDrawSurfaceMemPtr(), 0, WINDOW_HEIGHT * WINDOW_WIDTH);
     releaseDDrawSurfaceMem();
     fillDDrawPalette();
-    showCursor(1);
+    showCursor(true);
     sprintf(Caption, "FILE ERROR : %d", errorCode);
     MessageBoxA(gHWnd, lpText, Caption, 0);
     exit(-1);

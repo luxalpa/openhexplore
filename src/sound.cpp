@@ -11,7 +11,6 @@
 
 // @ 421860
 void initDirectSound(int a1, int maxAudioBufferSize) {
-    int *v3; // eax
     int *v4; // eax
 
     if (gDirectSound != nullptr)
@@ -21,24 +20,22 @@ void initDirectSound(int a1, int maxAudioBufferSize) {
         gMaxAudioBufferSize = maxAudioBufferSize;
 
     gAudioBufferPos = 0;
-    int *v2 = &dword_4EA518;
-    do {
-        *v2 = -1;
-        v2 += 54;
-    } while (v2 < (int *) &unk_4EA6C8);
-    v3 = &dword_4EA604;
-    do {
-        *v3 = 0;
-        v3 += 7;
-        *(v3 - 3) = 0;
-        *(v3 - 2) = -1;
-    } while (v3 < (int *) &unk_4EAEC4);
-    v4 = dword_4EAED0;
-    do {
-        *v4 = 0;
-        v4 += 8;
-        *(v4 - 4) = -1;
-    } while (v4 < &dword_4EAFD0);
+
+    for(int i = 0; i < NUM_SOUNDBANKS; i++) {
+        sbkInfos[i].fileDesc = -1;
+    }
+
+    for(int i = 0; i < NUM_SOUNDINFO2S; i++) {
+        SoundInfo2& info = stru_4EA600[i];
+        info.soundBuffer = nullptr;
+        info.numPlayed2 = 0;
+        info.sampleID = -1;
+    }
+
+    for(int i = 0; i < NUM_SOUNDINFOS; i++) {
+        stru_4EAEC8[i].soundBuffer = nullptr;
+        stru_4EAEC8[i].soundID = -1;
+    }
 
     for (int i = 0; i < 8; i++) {
         gVolumes[i] = 100;
@@ -316,7 +313,6 @@ int sub_422300(int sampleID, int iSoundBufferLoc, int iSampleBank) {
 
     WAVEFORMATEX waveformatex;
     int fdSampleFile;
-
 
     if (sbkInfo.containsSamples) {
         Files::read(fd, &waveformatex, sizeof(WAVEFORMATEX));

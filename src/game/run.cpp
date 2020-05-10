@@ -47,7 +47,7 @@ bool sub_426590() {
 
     // This is only true at the start
     if (introState == -1) {
-        showCursor(true);
+        showCursor(false);
         introState = 0;
     }
 

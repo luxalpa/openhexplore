@@ -10,6 +10,10 @@
 #define WINDOW_WIDTH 640
 #define WINDOW_HEIGHT 480
 
+#define NUM_SOUNDBANKS 2
+#define NUM_SOUNDINFOS 8
+#define NUM_SOUNDINFO2S 73
+
 #define dword_440040        GLOB(0x440040, int)
 #define dword_440044        GLOB(0x440044, int)
 #define dword_440048        GLOB(0x440048, int)
@@ -123,14 +127,8 @@
 #define gVolumes            ADDR(0x4EA420, int)
 #define gDirectSoundBuffer2 GLOB(0x4EA444, IDirectSoundBuffer*)
 #define sbkInfos            ADDR(0x4EA450, SBKInfo) // 2 elements
-#define dword_4EA518        GLOB(0x4EA518, int)
-
 #define stru_4EA600         ADDR(0x4EA600, SoundInfo2) // 73 elements
-#define dword_4EA604        GLOB(0x4EA604, int)
-#define unk_4EA6C8          GLOB(0x4EA6C8, int*)
-#define unk_4EAEC4          GLOB(0x4EAEC4, int*)
 #define stru_4EAEC8         ADDR(0x4EAEC8, SoundInfo) // 8 elements
-#define dword_4EAED0        ADDR(0x4EAED0, int)
 #define gSmpInfos           ADDR(0x4EAFC8, SmpInfo) // 25 elements
 #define dword_4EAFD0        GLOB(0x4EAFD0, int)
 #define gSampleDir          ADDR(0x4EB160, char) // 256 characters
