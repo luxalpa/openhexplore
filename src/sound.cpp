@@ -11,8 +11,6 @@
 
 // @ 421860
 void initDirectSound(int a1, int maxAudioBufferSize) {
-    int *v4; // eax
-
     if (gDirectSound != nullptr)
         return;
 
@@ -21,20 +19,20 @@ void initDirectSound(int a1, int maxAudioBufferSize) {
 
     gAudioBufferPos = 0;
 
-    for(int i = 0; i < NUM_SOUNDBANKS; i++) {
-        sbkInfos[i].fileDesc = -1;
+    for (int i = 0; i < NUM_SOUNDBANKS; i++) {
+        gSBKInfos[i].fileDesc = -1;
     }
 
-    for(int i = 0; i < NUM_SOUNDINFO2S; i++) {
-        SoundInfo2& info = stru_4EA600[i];
+    for (int i = 0; i < NUM_SOUNDTEMPLATES; i++) {
+        SoundTemplate &info = gSoundTemplateCache[i];
         info.soundBuffer = nullptr;
-        info.numPlayed2 = 0;
+        info.numActive = 0;
         info.sampleID = -1;
     }
 
-    for(int i = 0; i < NUM_SOUNDINFOS; i++) {
-        stru_4EAEC8[i].soundBuffer = nullptr;
-        stru_4EAEC8[i].soundID = -1;
+    for (int i = 0; i < NUM_SOUNDINSTANCES; i++) {
+        gSoundInstanceCache[i].soundBuffer = nullptr;
+        gSoundInstanceCache[i].soundID = -1;
     }
 
     for (int i = 0; i < 8; i++) {
@@ -90,7 +88,7 @@ int loadSBK(const char *filename) {
     int pos = 0;
 
     for (; pos < 2; pos++) {
-        if (sbkInfos[pos].fileDesc == -1)
+        if (gSBKInfos[pos].fileDesc == -1)
             break;
     }
 
@@ -106,7 +104,7 @@ int loadSBK(const char *filename) {
 
     if (fd == -1) return -1;
 
-    SBKInfo &info = sbkInfos[pos];
+    SBKInfo &info = gSBKInfos[pos];
 
     info.fileDesc = fd;
     lstrcpyA(info.filename, filename);
@@ -161,8 +159,7 @@ int randomRange(int min, int max) {
 }
 
 // @ 421DA0
-int sub_421DA0(int sndBnk, unsigned int snd, int volume) {
-    char v24[0xFC]; // [esp+3Ch] [ebp-FCh]
+int playSound(int sndBnk, unsigned int snd, int volume) {
     static int nextSoundID = 0;
 
     bool bSomeFlag = false;
@@ -177,24 +174,25 @@ int sub_421DA0(int sndBnk, unsigned int snd, int volume) {
     if (gSmpInfos[sndBnk].numSounds <= snd)
         return -1;
 
-    const int v7 = sub_4220D0(); // TODO: Find out what this is
-    if (v7 == -1)
+    const int soundInstance = getNextFreeSoundInstance();
+    if (soundInstance == -1)
         return -1;
 
-    SoundInfo &curSndInfo = stru_4EAEC8[v7];
+    SoundInstance &curSndInfo = gSoundInstanceCache[soundInstance];
 
     SmpBinEntry *sndEntry = &gSmpInfos[sndBnk].pData[snd];
-    const int v9 = sub_422200(sndEntry->sampleID, gSmpInfos[sndBnk].smpBank);
-    if (v9 == -1)
+    const int soundTemplateID = loadSample(sndEntry->sampleID, gSmpInfos[sndBnk].smpBank);
+    if (soundTemplateID == -1)
         return -1;
 
-    SoundInfo2 &curSndInfo2 = stru_4EA600[v9];
+    SoundTemplate &curSndInfo2 = gSoundTemplateCache[soundTemplateID];
 
     int result = gDirectSound->DuplicateSoundBuffer(
             curSndInfo2.soundBuffer,
             &curSndInfo.soundBuffer);
     if (result != DS_OK) {
         // TODO: This error is not actually being displayed.
+        char v24[0xFC];
         sprintf(v24, "Unable to duplicate buffer\ncode=%d %x %x", result, (unsigned int) gDirectSound,
                 (unsigned int) curSndInfo2.soundBuffer);
         return -1;
@@ -250,10 +248,10 @@ int sub_421DA0(int sndBnk, unsigned int snd, int volume) {
 
     curSndInfo2.timePlayed = GetTickCount();
     curSndInfo2.numPlayed++;
-    curSndInfo2.numPlayed2++;
+    curSndInfo2.numActive++;
 
     curSndInfo.numPlayed = curSndInfo2.numPlayed;
-    curSndInfo.field_4 = v9;
+    curSndInfo.soundTemplateID = soundTemplateID;
     curSndInfo.timePlayed = GetTickCount();
     curSndInfo.timeEnd = curSndInfo.timePlayed + 1000 * curSndInfo2.duration / frequency;
     curSndInfo.panMode = sndEntry->panMode;
@@ -269,33 +267,122 @@ int sub_421DA0(int sndBnk, unsigned int snd, int volume) {
     return curSndInfo.soundID;
 }
 
+// @ 422190
+void releaseAllSoundBuffers() {
+    unsigned long status;
+
+    for (int i = 0; i < NUM_SOUNDINSTANCES; i++) {
+        SoundInstance &instance = gSoundInstanceCache[i];
+        if (instance.soundBuffer != nullptr
+            && instance.soundBuffer->GetStatus(&status) == DS_OK
+            && status & DSBSTATUS_PLAYING
+            && instance.soundBuffer->Release() == DS_OK) {
+            instance.soundBuffer = nullptr;
+            instance.soundID = -1;
+            gSoundTemplateCache[instance.soundTemplateID].numActive--;
+        }
+    }
+}
+
+// @ 4220D0
+int getNextFreeSoundInstance() {
+    releaseAllSoundBuffers();
+
+    int instanceID = -1;
+
+    for (int i = 0; i < NUM_SOUNDINSTANCES; i++) {
+        if (gSoundInstanceCache[i].soundBuffer == nullptr) {
+            instanceID = i;
+        }
+    }
+
+    if (instanceID == -1) {
+        int maxNumPlayed = -1;
+
+        // get the sound Instance with the highest numPlayed
+        for (int i = 0; i < NUM_SOUNDINSTANCES; i++) {
+            SoundInstance &instance = gSoundInstanceCache[i];
+            int numPlayed = instance.volumeMod & 0x80 ? 0 : instance.numPlayed;
+            if (numPlayed > maxNumPlayed) {
+                maxNumPlayed = instance.numPlayed;
+                instanceID = i;
+            }
+        }
+
+        SoundInstance &instance = gSoundInstanceCache[instanceID];
+
+        if (instance.soundBuffer->Stop() == DS_OK && instance.soundBuffer->Release() == DS_OK) {
+            instance.soundBuffer = nullptr;
+            instance.soundID = -1;
+            gSoundTemplateCache[instance.soundTemplateID].numActive--;
+        } else {
+            return -1;
+        }
+    }
+    return instanceID;
+}
+
+// Returns index for sound template ID
 // @ 422200
-int sub_422200(int sampleID, int smpBank) {
+int loadSample(int sampleID, int smpBank) {
     int emptySoundBufferLocation = -1;
 
-    for (int i = 0; i < 73; i++) {
-        SoundInfo2 &soundInfo = stru_4EA600[i];
-        if (soundInfo.sampleID == sampleID) {
+    for (int i = 0; i < NUM_SOUNDTEMPLATES; i++) {
+        SoundTemplate &soundTemplate = gSoundTemplateCache[i];
+        if (soundTemplate.sampleID == sampleID) {
             return i;
         }
-        if (soundInfo.soundBuffer == nullptr) {
+        if (soundTemplate.soundBuffer == nullptr) {
             emptySoundBufferLocation = i;
         }
     }
 
     if (emptySoundBufferLocation != -1) {
-        return sub_422300(sampleID, emptySoundBufferLocation, smpBank);
+        return loadSampleFromDisk(sampleID, emptySoundBufferLocation, smpBank);
     }
 
-    return sub_422300(sampleID, sub_422260(), smpBank);
+    return loadSampleFromDisk(sampleID, getNextFreeSoundTemplate(), smpBank);
+}
+
+// Get next free soundTemplate position in the cache. If there is no more space in the cache, it will release the sound with the lowest duration.
+// @ 422260
+int getNextFreeSoundTemplate() {
+    unsigned int minDuration = MAXDWORD32;
+    int idx = 0;
+
+    // Find the sound with the shortest duration and release it.
+    for (int i = 0; i < NUM_SOUNDTEMPLATES; i++) {
+        SoundTemplate *curSoundTemplate = &gSoundTemplateCache[i];
+        if (curSoundTemplate->soundBuffer == nullptr) {
+            return i;
+        }
+
+        if (curSoundTemplate->numActive == 0 && curSoundTemplate->duration < minDuration) {
+            minDuration = curSoundTemplate->duration;
+            idx = i;
+        }
+    }
+
+    SoundTemplate *soundTemplate = &gSoundTemplateCache[idx];
+
+    if (minDuration == MAXDWORD32)
+        return -1;
+
+    if (soundTemplate->soundBuffer->Release() != DS_OK)
+        return -1;
+
+    soundTemplate->soundBuffer = 0;
+    soundTemplate->sampleID = -1;
+    gAudioBufferPos -= soundTemplate->duration;
+    return idx;
 }
 
 // @ 422300
-int sub_422300(int sampleID, int iSoundBufferLoc, int iSampleBank) {
-    if (iSoundBufferLoc == -1)
+int loadSampleFromDisk(int sampleID, int soundTemplateID, int iSampleBank) {
+    if (soundTemplateID == -1)
         return -1;
 
-    SBKInfo &sbkInfo = sbkInfos[iSampleBank];
+    SBKInfo &sbkInfo = gSBKInfos[iSampleBank];
 
     int fd = sbkInfo.fileDesc;
     if (fd == -1 || sbkInfo.numSamples <= sampleID)
@@ -379,7 +466,7 @@ int sub_422300(int sampleID, int iSoundBufferLoc, int iSampleBank) {
 
     if (!audioBufferSize) return -1;
 
-    int result = -1;
+    int soundBufferIdx = -1;
 
     if (reserveAudioBuffer(audioBufferSize)) {
         DSBUFFERDESC dsbufferdesc = {
@@ -400,7 +487,8 @@ int sub_422300(int sampleID, int iSoundBufferLoc, int iSampleBank) {
             void *pvAudioPtr2;
             unsigned long ptr2Size;
 
-            if (pSoundBuffer->Lock(0, audioBufferSize, &pvAudioPtr1, &ptr1Size, &pvAudioPtr2, &ptr2Size, 0) == DS_OK) {
+            if (pSoundBuffer->Lock(0, audioBufferSize, &pvAudioPtr1, &ptr1Size, &pvAudioPtr2, &ptr2Size, 0) ==
+                DS_OK) {
                 if (ptr1Size == audioBufferSize) {
                     if (sbkInfo.containsSamples)
                         Files::read(fd, pvAudioPtr1, audioBufferSize);
@@ -408,15 +496,15 @@ int sub_422300(int sampleID, int iSoundBufferLoc, int iSampleBank) {
                         Files::read(fdSampleFile, pvAudioPtr1, audioBufferSize);
                 }
 
-                if (!pSoundBuffer->Unlock(pvAudioPtr1, audioBufferSize, pvAudioPtr2, 0)) {
-                    stru_4EA600[iSoundBufferLoc] = {
+                if (pSoundBuffer->Unlock(pvAudioPtr1, audioBufferSize, pvAudioPtr2, 0) == DS_OK) {
+                    gSoundTemplateCache[soundTemplateID] = {
                             .numPlayed = 0,
                             .soundBuffer = pSoundBuffer,
                             .duration = static_cast<int>(audioBufferSize),
                             .frequency = static_cast<int>(waveformatex.nSamplesPerSec),
                             .sampleID = sampleID,
                     };
-                    result = iSoundBufferLoc;
+                    soundBufferIdx = soundTemplateID;
                 }
             }
             gAudioBufferPos += audioBufferSize;
@@ -425,7 +513,7 @@ int sub_422300(int sampleID, int iSoundBufferLoc, int iSampleBank) {
 
     if (!sbkInfo.containsSamples)
         Files::close(fdSampleFile);
-    return result;
+    return soundBufferIdx;
 }
 
 // Releases stuff from the audio buffer until there's enough space again
@@ -438,11 +526,11 @@ int reserveAudioBuffer(unsigned int audioBufferSize) {
         unsigned int timePlayed = -1;
         int i;
 
-        SoundInfo2 *info = nullptr;
+        SoundTemplate *info = nullptr;
 
         for (i = 0; i < 73; i++) {
-            SoundInfo2 &soundInfo2 = stru_4EA600[i];
-            if (soundInfo2.soundBuffer != nullptr && soundInfo2.numPlayed2 && soundInfo2.timePlayed < timePlayed) {
+            SoundTemplate &soundInfo2 = gSoundTemplateCache[i];
+            if (soundInfo2.soundBuffer != nullptr && soundInfo2.numActive && soundInfo2.timePlayed < timePlayed) {
                 info = &soundInfo2;
                 timePlayed = soundInfo2.timePlayed;
             }
@@ -466,8 +554,8 @@ int reserveAudioBuffer(unsigned int audioBufferSize) {
 }
 
 // @ 4227B0
-int sub_4227B0(int sndBnk, int snd) {
-    return sub_421DA0(sndBnk, snd, 100);
+int playSoundAtFullVolume(int sndBnk, int snd) {
+    return playSound(sndBnk, snd, 100);
 }
 
 // @ 422C00

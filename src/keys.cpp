@@ -41,7 +41,7 @@ LRESULT keycodeHandler(UINT msg, WPARAM wparam, LPARAM lparam) {
                     unsigned int nextCachePos = (gKeyCacheIdx + 1) % 10;
                     if (nextCachePos == gKeyCacheIdxLastKey) { // If we run out of cache space
                         if (wparam != VK_BACK) {
-                            sub_4227B0(gSysSmpBinPos, 20);
+                            playSoundAtFullVolume(gSysSmpBinPos, 20);
                             return TRUE;
                         }
                     } else if (wparam == VK_BACK || !(lparam & 0x40000000)) {
@@ -76,7 +76,7 @@ LRESULT keycodeHandler(UINT msg, WPARAM wparam, LPARAM lparam) {
                 v9 = dword_44CDD4;
                 result = (dword_44CDD4 + 1) / 10;
                 if (dword_44CDD8 == (dword_44CDD4 + 1) % 10) {
-                    result = sub_4227B0(gSysSmpBinPos, 20);
+                    result = playSoundAtFullVolume(gSysSmpBinPos, 20);
                 } else {
                     dword_44CDD4 = (dword_44CDD4 + 1) % 10;
                     dword_4EA308[v9] = wparam;

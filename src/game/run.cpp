@@ -243,7 +243,7 @@ int sub_429620() {
     gMusicSmpBinPos = loadMusicSmpBin();
     gSysSmpBinPos = loadSysSmpBin();
 
-    sub_40A650(gSysSmpBinPos, 5);
+    playSoundEffect(gSysSmpBinPos, 5);
 
     sub_40C810();
     sub_415CE0();

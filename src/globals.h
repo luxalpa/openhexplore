@@ -11,8 +11,8 @@
 #define WINDOW_HEIGHT 480
 
 #define NUM_SOUNDBANKS 2
-#define NUM_SOUNDINFOS 8
-#define NUM_SOUNDINFO2S 73
+#define NUM_SOUNDINSTANCES 8
+#define NUM_SOUNDTEMPLATES 80
 
 #define dword_440040        GLOB(0x440040, int)
 #define dword_440044        GLOB(0x440044, int)
@@ -103,7 +103,7 @@
 #define dword_4E5FE0        GLOB(0x4E5FE0, int) // = 1
 #define dword_4E5FF4        GLOB(0x4E5FF4, int)
 #define dword_4E607C        GLOB(0x4E607C, int)
-#define dword_4E6098        GLOB(0x4E6098, int)
+#define dword_4E6098        GLOB(0x4E6098, int) // Mutes the sound if certain flag is set
 #define dword_4E60B4        GLOB(0x4E60B4, int)
 #define dword_4E60B8        GLOB(0x4E60B8, int)
 #define dword_4E60C8        GLOB(0x4E60C8, int)
@@ -126,11 +126,10 @@
 #define gSoundBufferSize    GLOB(0x4EA41C, int)
 #define gVolumes            ADDR(0x4EA420, int)
 #define gDirectSoundBuffer2 GLOB(0x4EA444, IDirectSoundBuffer*)
-#define sbkInfos            ADDR(0x4EA450, SBKInfo) // 2 elements
-#define stru_4EA600         ADDR(0x4EA600, SoundInfo2) // 73 elements
-#define stru_4EAEC8         ADDR(0x4EAEC8, SoundInfo) // 8 elements
+#define gSBKInfos            ADDR(0x4EA450, SBKInfo) // 2 elements
+#define gSoundTemplateCache  ADDR(0x4EA600, SoundTemplate) // 80 elements
+#define gSoundInstanceCache  ADDR(0x4EAEC8, SoundInstance) // 8 elements
 #define gSmpInfos           ADDR(0x4EAFC8, SmpInfo) // 25 elements
-#define dword_4EAFD0        GLOB(0x4EAFD0, int)
 #define gSampleDir          ADDR(0x4EB160, char) // 256 characters
 #define dword_4EB750        ADDR(0x4EB750, int)
 #define gGame               GLOB(0x4EB780, Game)

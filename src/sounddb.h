@@ -9,6 +9,6 @@ void loadSoundbankHeaders();
 
 int loadSysSmpBin();
 int loadMusicSmpBin();
-int sub_40A650(int sndBank, int snd);
+int playSoundEffect(int sndBank, int snd);
 
 #endif //OPENHEXPLORE_SOUNDDB_H

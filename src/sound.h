@@ -33,8 +33,8 @@ struct SmpInfo {
     int smpBank;
 };
 
-struct SoundInfo {
-    int field_4;
+struct SoundInstance {
+    int soundTemplateID;
     int numPlayed;
     IDirectSoundBuffer *soundBuffer;
     int timePlayed;
@@ -47,13 +47,13 @@ struct SoundInfo {
     char volumeLevelIdx;
 };
 
-struct SoundInfo2 {
+struct SoundTemplate {
     int numPlayed;
     IDirectSoundBuffer *soundBuffer;
     int timePlayed;
     int duration;
     int frequency;
-    int numPlayed2;
+    int numActive;
     int sampleID;
 };
 
@@ -68,15 +68,21 @@ int createSmpInfo(SmpBinEntry *data, unsigned int dataSize, int smpBankPos);
 
 int randomRange(int min, int max);
 
-int sub_421DA0(int sndBnk, unsigned int snd, int volume);
+int playSound(int sndBnk, unsigned int snd, int volume);
 
-int sub_422200(int sampleID, int smpBank);
+void releaseAllSoundBuffers();
 
-int sub_422300(int sampleID, int iSoundBufferLoc, int iSampleBank);
+int getNextFreeSoundInstance();
+
+int loadSample(int sampleID, int smpBank);
+
+int getNextFreeSoundTemplate();
+
+int loadSampleFromDisk(int sampleID, int soundTemplateID, int iSampleBank);
 
 signed int __cdecl reserveAudioBuffer(unsigned int audioBufferSize);
 
-int sub_4227B0(int sndBnk, int snd);
+int playSoundAtFullVolume(int sndBnk, int snd);
 
 HRESULT initSoundBuffer(unsigned int soundBufferSize);
 

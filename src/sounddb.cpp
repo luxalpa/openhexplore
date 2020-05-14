@@ -47,9 +47,9 @@ int loadMusicSmpBin() {
 }
 
 // @ 40A650
-int sub_40A650(int sndBank, int snd) {
+int playSoundEffect(int sndBank, int snd) {
     if (dword_4E6098 & 4)
         return -1;
     else
-        return sub_4227B0(sndBank, snd);
+        return playSoundAtFullVolume(sndBank, snd);
 }
