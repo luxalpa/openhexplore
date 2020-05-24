@@ -8,6 +8,55 @@
 #include "globals.h"
 #include "global_fns.h"
 #include "files.h"
+#include <string.h>
+
+struct UnkSoundStruct2 {
+    int unk1;
+    int unk2;
+    int unk3;
+    int unk4;
+    int unk5;
+    int unk6;
+};
+
+struct UnkSoundStruct {
+    UnkSoundStruct2 *pData;
+    int numElements;
+    int unk2;
+};
+
+// @ 4214F0
+void sub_4214F0(int numElements) {
+    size_t size = 24 * numElements;
+
+    for (int i = 0; i < 4; i++) {
+        UnkSoundStruct &s = stru_4D5DE0[i];
+
+        s.pData = (UnkSoundStruct2*)allocFile(size, 0x800E);
+        s.numElements = 0;
+        s.unk2 = numElements;
+
+        memset(s.pData, 0, size);
+    }
+}
+
+// @ 421580
+void sub_421580(int pos, int a2, int a3, int a4, int a5, int a6) {
+    UnkSoundStruct &soundStruct = stru_4D5DE0[pos];
+
+    if (pos < 4) {
+        if (soundStruct.unk2 > soundStruct.numElements) {
+            UnkSoundStruct2 &curElement = soundStruct.pData[soundStruct.numElements];
+            curElement.unk1 = a2;
+            curElement.unk2 = a3;
+            curElement.unk3 = a4;
+            curElement.unk4 = a5;
+            curElement.unk5 = 1;
+            curElement.unk6 = a6;
+            soundStruct.numElements++;
+        }
+    }
+}
 
 // @ 421860
 void initDirectSound(int a1, int maxAudioBufferSize) {
@@ -74,8 +123,7 @@ void initDirectSound(int a1, int maxAudioBufferSize) {
 HRESULT createDSound(LPDIRECTSOUND *ppDs, int a2) {
     if (!a2)
         return DirectSoundCreate(nullptr, ppDs, nullptr);
-
-    DirectSoundEnumerateA((LPDSENUMCALLBACKA) sub_421A30, &a2);
+//    DirectSoundEnumerateA(sub_421A30, &a2);
     *ppDs = nullptr;
     return DSERR_INVALIDPARAM;
 }

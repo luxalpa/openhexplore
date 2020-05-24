@@ -44,6 +44,8 @@
 #define dword_44CDD4        GLOB(0x44CDD4, int)
 #define dword_44CDD8        GLOB(0x44CDD8, int)
 #define dword_44CDDC        GLOB(0x44CDDC, int)
+#define dword_44CDE0        ADDR(0x44CDE0, int) // 128 elements
+#define dword_44CFE8        ADDR(0x44CFE8, int)
 
 #define gDD                 GLOB(0x44E0F4, LPDIRECTDRAW)
 #define gPrimaryDDS         GLOB(0x44E0F8, IDirectDrawSurface*)
@@ -67,6 +69,7 @@
 #define dword_44E400        ADDR(0x44E400, int)
 #define dword_44F340        ADDR(0x44F340, int)
 
+#define stru_4D5DE0        ADDR(0x4D5DE0, UnkSoundStruct) // 4 elements
 #define gDirectSound        GLOB(0x4D5E10, LPDIRECTSOUND)
 #define gDirectSoundBuffer  GLOB(0x4D5E14, IDirectSoundBuffer*)
 #define gMaxAudioBufferSize GLOB(0x4D5E18, int) // = 0x100000
@@ -86,6 +89,15 @@
 #define gMusicSmpBinPos     GLOB(0x4E5F5C, int) // = -1
 #define dword_4E5F60        GLOB(0x4E5F60, int) // = 70
 #define dword_4E5F68        GLOB(0x4E5F68, int) // = 400
+#define dword_4E5F7C        GLOB(0x4E5F7C, int)
+#define dword_4E5F80        GLOB(0x4E5F80, int)
+#define dword_4E5F84        GLOB(0x4E5F84, int)
+#define dword_4E5F94        GLOB(0x4E5F94, int)
+#define dword_4E5F98        GLOB(0x4E5F98, int)
+#define dword_4E5F9C        GLOB(0x4E5F9C, int)
+#define dword_4E5F78        GLOB(0x4E5F78, int)
+#define dword_4E5F90        GLOB(0x4E5F90, int)
+
 #define dword_4E5FA8        GLOB(0x4E5FA8, int)
 #define dword_4E5FAC        GLOB(0x4E5FAC, int) // is set to 2 when playing a video
 #define dword_4E5FB0        GLOB(0x4E5FB0, int)
@@ -149,6 +161,7 @@
 #define SmFntW              GLOB(0x5759E0, SB0Info)
 #define SmFntR              GLOB(0x575A10, SB0Info)
 #define SmFntB              GLOB(0x575A40, SB0Info)
+#define randArray           ADDR(0x575A70, unsigned char) // 0x100 elements
 #define gHMutex             GLOB(0x58B440, HANDLE)
 
 #endif //OPENHEXPLORE_GLOBALS_H

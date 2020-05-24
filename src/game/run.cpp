@@ -12,6 +12,27 @@
 #include "../keys.h"
 #include "../sound.h"
 #include "../sounddb.h"
+#include "../random.h"
+
+void sub_414530() {
+    sub_4214F0(25);
+    sub_421580(0, 1, 1, 150, 90, 2);
+    sub_421580(0, 0, 90, 640, 300, 1);
+    sub_421580(0, 614, 1, 25, 25, 5);
+    sub_421580(0, 614, 27, 25, 25, 6);
+    sub_421580(0, 614, 53, 25, 25, 7);
+    sub_421580(0, 1, 1, 637, 89, 3);
+    sub_421580(0, 268, 391, 108, 86, 8);
+    sub_421580(0, 1, 390, 637, 88, 4);
+    dword_4E5F7C = 305;
+    dword_4E5F80 = 80;
+    dword_4E5F84 = 40;
+    dword_4E5F94 = 305;
+    dword_4E5F98 = 80;
+    dword_4E5F9C = 40;
+    dword_4E5F78 = 236;
+    dword_4E5F90 = 324;
+}
 
 // @ 414C80
 void playVideo(PlayVideoMode mode, int episode, int level) {
@@ -245,10 +266,12 @@ int sub_429620() {
 
     playSoundEffect(gSysSmpBinPos, 5);
 
-    sub_40C810();
+    createRandArray();
     sub_415CE0();
     sub_415D30();
+
     sub_414530();
+
     sub_420130(&dword_4DBCE8, 0x6000);
     sub_4089E0();
     sub_409050();

@@ -108,3 +108,17 @@ bool trackKey(int keyCode, char bit) {
     gTrackedKeyStates[bit] = keyCode;
     return true;
 }
+
+// @ 415CE0
+void sub_415CE0() {
+    for(int i = 0; i < 128; i++) {
+        dword_44CDE0[i] = rand();
+    }
+}
+
+// @ 415D30
+void sub_415D30() {
+    for(int i = 0; i < 128; i++) {
+        dword_44CFE8[i] = rand();
+    }
+}

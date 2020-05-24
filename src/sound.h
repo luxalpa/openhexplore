@@ -57,6 +57,9 @@ struct SoundTemplate {
     int sampleID;
 };
 
+void sub_4214F0(int numElements);
+
+void sub_421580(int pos, int a2, int a3, int a4, int a5, int a6);
 
 void initDirectSound(int a1, int maxAudioBufferSize);
 
