@@ -1,8 +1,8 @@
-# About
+## About
 
 OpenHexplore is a decompilation project of the 1998 video game [Hexplore](https://en.wikipedia.org/wiki/Hexplore) with the goal to modernize and improve it.
 
-# How it works
+## How it works
 
 Decompilation itself is being done step by step using Hexrays IDA Pro and transforming / renaming the code to make it more readable as well as stripping / fixing code along the way.
 
@@ -10,14 +10,14 @@ The **`OpenHexplore.exe`** is a modified version of the original `Hexplore.exe` 
 
 To jump back into the original games code, `global_fns.h` contains definitions for all currently needed original functions.
 
-# Current State
+## Current State
 
 Currently only the sequence up until (including) the loading screen has been decompiled.
 
-# Plans for the future
+## Plans for the future
 
 Use the information gathered to create a full 3D version of the project using Unity3D.
 
-# Notes
+## Notes
 
 For running and development, [**DxWnd**](https://sourceforge.net/projects/dxwnd/) is strongly recommended

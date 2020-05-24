@@ -1,8 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 project(openhexplore)
 
-#set(CMAKE_RUNTIME_OUTPUT_DIRECTORY T:/Games/OpenHexplore) # set output to gGame file
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}) # set output to gGame file
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}) # set output to Game file
 
 set(CMAKE_CXX_STANDARD 20)
 
