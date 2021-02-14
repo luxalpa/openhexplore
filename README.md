@@ -16,7 +16,16 @@ Currently only the sequence up until (including) the loading screen has been dec
 
 ## Plans for the future
 
-Use the information gathered to create a full 3D version of the project using Unity3D.
+- Finish the decompilation
+- Port the code base to Vulkan (and make it use 3D graphics)
+- Support modern resolutions as well as Window mode
+- improved pathfinding
+- improved controls
+- Options for hotkey rebinding, language, etc
+- Mod support
+- Map editor
+- Online multiplayer
+- Bug fixes
 
 ## Notes
 

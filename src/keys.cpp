@@ -7,6 +7,7 @@
 #include "globals.h"
 #include "global_fns.h"
 #include "sound.h"
+#include "helpers/debug.h"
 
 // @ 4159A0
 LRESULT keycodeHandler(UINT msg, WPARAM wparam, LPARAM lparam) {
@@ -109,10 +110,11 @@ bool trackKey(int keyCode, char bit) {
     return true;
 }
 
+// RNG for the voice lines
 // @ 415CE0
-void sub_415CE0() {
+void initVoiceRNG() {
     for(int i = 0; i < 128; i++) {
-        dword_44CDE0[i] = rand();
+        voiceRNGTable[i] = rand();
     }
 }
 

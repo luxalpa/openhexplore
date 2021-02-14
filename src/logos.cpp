@@ -9,6 +9,14 @@
 #include "game_window.h"
 #include "pcx.h"
 #include "keys.h"
+#include "logos.h"
+
+// @ 420130
+void sub_420130(UnkStruct *a1, int numEntries) {
+    a1->pData = allocFile(256 * numEntries, 0x8005);
+    a1->unk1 = 0;
+    a1->unk2 = 0;
+}
 
 // @ 4205E0
 void showHexploreLogo() {

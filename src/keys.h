@@ -8,7 +8,7 @@
 LRESULT keycodeHandler(UINT msg, WPARAM wparam, LPARAM lparam);
 int processKey();
 bool trackKey(int keyCode, char bit);
-void sub_415CE0();
+void initVoiceRNG();
 void sub_415D30();
 
 #endif //OPENHEXPLORE_KEYS_H

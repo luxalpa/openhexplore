@@ -86,8 +86,9 @@ assert_struct_size(registers, 7 * 4);
     #define GOOD_PLACE_FOR_DATA_SEGMENT ((uintptr_t)0x8A4000)
 #endif
 
-#define ADDR(address, type)     ((type*)(GOOD_PLACE_FOR_DATA_SEGMENT - 0x8A4000 + (address)))
-#define GLOB(address, type)      (*((type*)(GOOD_PLACE_FOR_DATA_SEGMENT - 0x8A4000 + (address))))
+#define ADDR(address, type)     ((type*)(address))
+#define ARR(address, type, size)     (*reinterpret_cast<type(*)[size]>((type*)(address)))
+#define GLOB(address, type)      (*((type*)(address)))
 
 /**
 * Returns the flags register

@@ -8,8 +8,9 @@ set(CMAKE_CXX_STANDARD 20)
 #FILE(GLOB_RECURSE SRCFILES src/*.cpp src/*.h src/*.hpp)
 
 add_compile_definitions(_X86_) # so we can use windef.h instead of windows.h
+add_compile_definitions(_USE_MATH_DEFINES) # allow math.h M_PI
 
 add_library(openhexplore SHARED
         src/main.cpp src/main.h
         src/interop/interop.cpp src/interop/interop.hpp
-        src/init.cpp src/init.h src/globals.h src/game_window.cpp src/game_window.h src/global_fns.h src/game/meta.cpp src/game/meta.h src/filedb.cpp src/filedb.h src/files.cpp src/files.h src/registry.cpp src/registry.h src/game/run.cpp src/game/run.h src/other.cpp src/other.h src/logos.cpp src/logos.h src/pcx.cpp src/pcx.h src/keys.cpp src/keys.h src/sound.cpp src/sound.h src/sounddb.cpp src/sounddb.h src/random.cpp src/random.h)
+        src/init.cpp src/init.h src/globals.h src/game_window.cpp src/game_window.h src/global_fns.h src/game/meta.cpp src/game/meta.h src/filedb.cpp src/filedb.h src/files.cpp src/files.h src/registry.cpp src/registry.h src/game/run.cpp src/game/run.h src/other.cpp src/other.h src/logos.cpp src/logos.h src/pcx.cpp src/pcx.h src/keys.cpp src/keys.h src/sound.cpp src/sound.h src/sounddb.cpp src/sounddb.h src/random.cpp src/random.h src/helpers/debug.cpp src/helpers/debug.h src/graphics.cpp src/graphics.h src/todo/todo.cpp src/todo/todo.h)

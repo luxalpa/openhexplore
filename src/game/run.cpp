@@ -13,6 +13,7 @@
 #include "../sound.h"
 #include "../sounddb.h"
 #include "../random.h"
+#include "../todo/todo.h"
 
 void sub_414530() {
     sub_4214F0(25);
@@ -267,13 +268,14 @@ int sub_429620() {
     playSoundEffect(gSysSmpBinPos, 5);
 
     createRandArray();
-    sub_415CE0();
-    sub_415D30();
+    initVoiceRNG(); // creates arrays with random numbers
+    sub_415D30(); // -----^
 
     sub_414530();
 
     sub_420130(&dword_4DBCE8, 0x6000);
-    sub_4089E0();
+
+    initAnimatedObjects();
     sub_409050();
     sub_406B60(dword_4EB750);
     sub_40B7E0();

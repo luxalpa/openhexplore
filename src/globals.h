@@ -44,7 +44,7 @@
 #define dword_44CDD4        GLOB(0x44CDD4, int)
 #define dword_44CDD8        GLOB(0x44CDD8, int)
 #define dword_44CDDC        GLOB(0x44CDDC, int)
-#define dword_44CDE0        ADDR(0x44CDE0, int) // 128 elements
+#define voiceRNGTable       ADDR(0x44CDE0, int) // 128 elements
 #define dword_44CFE8        ADDR(0x44CFE8, int)
 
 #define gDD                 GLOB(0x44E0F4, LPDIRECTDRAW)
@@ -79,7 +79,7 @@
 #define dword_4DBCC0        GLOB(0x4DBCC0, int)
 #define dword_4DBCC4        GLOB(0x4DBCC4, int)
 #define dword_4DBCC8        GLOB(0x4DBCC8, int)
-#define dword_4DBCE8        GLOB(0x4DBCE8, int)
+#define dword_4DBCE8        GLOB(0x4DBCE8, UnkStruct)
 #define dword_4DBCF4        GLOB(0x4DBCF4, int)
 #define dword_4DBCF8        GLOB(0x4DBCF8, int) // = -1
 #define dword_4DBD00        GLOB(0x4DBD00, int)
@@ -126,6 +126,7 @@
 #define dword_4E60DC        GLOB(0x4E60DC, int) // = -1
 //#define dword_4E60E0        GLOB(0x4E60E0, int) // = -1
 #define dword_4E60EC        GLOB(0x4E60EC, int) // = -1
+#define dword_4E6198        GLOB(0x4E6198, int) // = 1
 
 // All data after 004E7000 is not part of the .exe
 
@@ -138,9 +139,9 @@
 #define gSoundBufferSize    GLOB(0x4EA41C, int)
 #define gVolumes            ADDR(0x4EA420, int)
 #define gDirectSoundBuffer2 GLOB(0x4EA444, IDirectSoundBuffer*)
-#define gSBKInfos            ADDR(0x4EA450, SBKInfo) // 2 elements
-#define gSoundTemplateCache  ADDR(0x4EA600, SoundTemplate) // 80 elements
-#define gSoundInstanceCache  ADDR(0x4EAEC8, SoundInstance) // 8 elements
+#define gSBKInfos           ADDR(0x4EA450, SBKInfo) // 2 elements
+#define gSoundTemplateCache ADDR(0x4EA600, SoundTemplate) // 80 elements
+#define gSoundInstanceCache ADDR(0x4EAEC8, SoundInstance) // 8 elements
 #define gSmpInfos           ADDR(0x4EAFC8, SmpInfo) // 25 elements
 #define gSampleDir          ADDR(0x4EB160, char) // 256 characters
 #define dword_4EB750        ADDR(0x4EB750, int)
@@ -162,6 +163,10 @@
 #define SmFntR              GLOB(0x575A10, SB0Info)
 #define SmFntB              GLOB(0x575A40, SB0Info)
 #define randArray           ADDR(0x575A70, unsigned char) // 0x100 elements
+#define unk_575CC0          ADDR(0x575CC0, UnkRandStruct) // 700 elements
+#define unk_5772A0          ARR(0x5772A0, unsigned int, 200)
+#define dword_577B40        GLOB(0x577B40, int)
+#define unk_577BC0          ADDR(0x577BC0, char) // 80000 elements
 #define gHMutex             GLOB(0x58B440, HANDLE)
 
 #endif //OPENHEXPLORE_GLOBALS_H
