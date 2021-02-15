@@ -13,7 +13,7 @@
 #include "../sound.h"
 #include "../sounddb.h"
 #include "../random.h"
-#include "../todo/todo.h"
+#include "engine_init.h"
 
 void sub_414530() {
     sub_4214F0(25);

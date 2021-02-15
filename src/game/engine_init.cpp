@@ -2,7 +2,7 @@
 // Created by Smaug on 2020-07-09.
 //
 
-#include "todo.h"
+#include "engine_init.h"
 #include "../globals.h"
 #include <math.h>
 #include "../filedb.h"
@@ -20,15 +20,13 @@ void sub_42B820(int a1) {
 // @ 4089E0
 void initAnimatedObjects() {
     const int numEntries = 8;
-    const int entrySize = 10000;
+    const int entrySize = 50 * 50 * sizeof(UnkAnimStruct3);
 
-    char *tempMemory1 = (char *) allocFile(0x10000, 0x8001);
-    char *tempMemory2 = (char *) allocFile(0x4000, 0x8001); // list of booleans, 128 * 128
-    char *tempMemory3 = (char *) allocFile(2500, 0x8001); // 50 * 50, which is also the model x * z size
+    UnkAnimStruct2 *tempMemory1 = (UnkAnimStruct2 *) allocFile(0x10000, 0x8001);
+    bool *tempMemory2 = (bool *) allocFile(128 * 128, 0x8001); // list of booleans
+    char *tempMemory3 = (char *) allocFile(50 * 50, 0x8001); // 50 * 50, which is also the model x * z size
 
     memset(unk_577BC0, 0x7Fu, numEntries * entrySize);
-
-    int *v33 = &dword_577B40;
 
     for (int i = 0; i < numEntries; i++) {
         memset(tempMemory2, 0, 0x4000u);
@@ -49,8 +47,8 @@ void initAnimatedObjects() {
 
         __int64 v6 = (signed __int64) (((sin(v4) - v2) * 64.0 + 64.0) * 65536.0);
 
-        char *v7 = tempMemory1;
-        char *v8 = tempMemory2;
+        UnkAnimStruct2 *v7 = tempMemory1;
+        bool *v8 = tempMemory2;
 
         for (int j = 0; j < 128; j++) {
             int v25 = v23;
@@ -62,25 +60,22 @@ void initAnimatedObjects() {
                 int v10 = (v25 & 0x7F0000u) >> 16;
                 int v11 = (v40 & 0x7F0000u) >> 16;
                 if (v10 > 39 && v10 < 89 && v11 > 39 && v11 < 89) {
-                    *v7 = v10 - 39;
-                    v7[1] = v11 - 39;
-                    v7[2] = k - 63;
-                    v7[3] = j - 63;
-                    *v8 = 1;
+                    v7->x = v10 - 39;
+                    v7->z = v11 - 39;
+                    v7->field2 = k - 63;
+                    v7->field3 = j - 63;
+                    *v8 = true;
                 }
-                v7 += 4;
+                v7++;
                 ++v8;
                 v25 += v35;
                 v40 += v27;
             }
         }
 
-        char *offset = unk_577BC0 + entrySize * i;
+        UnkAnimStruct3 *offset = &unk_577BC0[50 * 50 * i];
 
-        char *v13 = tempMemory1;
-        char *v32 = tempMemory2;
-
-        memset(tempMemory3, 0, 2500);
+        memset(tempMemory3, 0, 50 * 50);
 
         int v26 = 0;
         int v30 = 0;
@@ -89,16 +84,19 @@ void initAnimatedObjects() {
 
         for (int j = 0; j < 128; j++) {
             for (int k = 0; k < 128; k++) {
-                if (*v32 != 0) {
-                    int v15 = (unsigned __int8) *v13 + 50 * (unsigned __int8) v13[1];
+                int pos = j * 128 + k;
+
+                if (tempMemory2[pos] != 0) {
+                    UnkAnimStruct2 &v13 = tempMemory1[pos];
+                    int v15 = v13.x + 50 * v13.z;
                     char v16 = tempMemory3[v15];
                     if (v16) {
                         if (v16 == 1) {
-                            int v19 = (int) &offset[4 * v15];
-                            int v20 = v13[2];
-                            int v18 = v13[3];
-                            *(unsigned char *) (v19 + 2) = v20;
-                            *(unsigned char *) (v19 + 3) = v18;
+                            UnkAnimStruct3 &v19 = offset[v15];
+                            int v20 = v13.field2;
+                            int v18 = v13.field3;
+                            v19.field2 = v20;
+                            v19.field3 = v18;
                             tempMemory3[v15] = 2;
                             if (v28 > v20)
                                 v28 = v20;
@@ -111,10 +109,10 @@ void initAnimatedObjects() {
                             }
                         }
                     } else {
-                        int v17 = v13[2];
-                        int v18 = v13[3];
-                        offset[4 * v15] = v17;
-                        offset[4 * v15 + 1] = v18;
+                        int v17 = v13.field2;
+                        int v18 = v13.field3;
+                        offset[v15].field0 = v17;
+                        offset[v15].field1 = v18;
                         tempMemory3[v15] = 1;
                         if (v28 > v17)
                             v28 = v17;
@@ -127,17 +125,15 @@ void initAnimatedObjects() {
                         }
                     }
                 }
-
-                v13 += 4;
-                ++v32;
             }
         }
 
-        v33 += 4;
-        *(v33 - 4) = v28;
-        *(v33 - 3) = v30;
-        *(v33 - 2) = v24;
-        *(v33 - 1) = v26;
+        dword_577B40[i] = {
+                .field0 = v28,
+                .field1 = v30,
+                .field2 = v24,
+                .field3 = v26,
+        };
     }
     deallocFile(tempMemory3);
     deallocFile(tempMemory1);
@@ -171,9 +167,7 @@ void sub_409050() {
         }
     }
 
-    for(int i = 0; i < 700; i++) {
-        UnkRandStruct &v8 = unk_575CC0[i];
-
+    for (UnkRandStruct &v8 : stru_575CC0) {
         int v10 = rand();
         v8.field0 = (((v10 >> 31) ^ abs((_WORD) v10) & 0x1FF) - (v10 >> 31)) << 10;
         v8.field0 += 2 * (rand() % -512);

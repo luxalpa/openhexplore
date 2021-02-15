@@ -163,10 +163,10 @@
 #define SmFntR              GLOB(0x575A10, SB0Info)
 #define SmFntB              GLOB(0x575A40, SB0Info)
 #define randArray           ADDR(0x575A70, unsigned char) // 0x100 elements
-#define unk_575CC0          ADDR(0x575CC0, UnkRandStruct) // 700 elements
+#define stru_575CC0         ARR(0x575CC0, UnkRandStruct, 700)
 #define unk_5772A0          ARR(0x5772A0, unsigned int, 200)
-#define dword_577B40        GLOB(0x577B40, int)
-#define unk_577BC0          ADDR(0x577BC0, char) // 80000 elements
+#define dword_577B40        ARR(0x577B40, UnkAnimStruct, 8)
+#define unk_577BC0          ARR(0x577BC0, UnkAnimStruct3, 8 * 50 * 50 * 4) // the last one is sizeof(UnkAnimStruct3)
 #define gHMutex             GLOB(0x58B440, HANDLE)
 
 #endif //OPENHEXPLORE_GLOBALS_H
